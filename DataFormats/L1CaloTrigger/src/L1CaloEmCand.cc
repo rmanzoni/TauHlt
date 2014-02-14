@@ -49,7 +49,8 @@ L1CaloEmCand::L1CaloEmCand(unsigned rank, unsigned region, unsigned card, unsign
   m_bx(0)
 
 {
-  m_data = (rank & 0x3f) + ((region & 0x1)<<6) + ((card & 0x7)<<7); 
+  // 0x3f->0xff hack to support 9bit EIC in RCT
+  m_data = (rank & ((1 << (L1EMCAND_PRECISION-1)) - 1)) + ((region & 0x1)<<(L1EMCAND_PRECISION-1)) + ((card & 0x7)<<(L1EMCAND_PRECISION));
 }
 
 // construct from content (for use in emulator)
@@ -60,7 +61,8 @@ L1CaloEmCand::L1CaloEmCand(unsigned rank, unsigned region, unsigned card, unsign
   m_index(index),
   m_bx(bx)
 {
-  m_data = (rank & 0x3f) + ((region & 0x1)<<6) + ((card & 0x7)<<7); 
+  // 0x3f->0xff hack to support 9bit EIC in RCT
+  m_data = (rank & ((1 << (L1EMCAND_PRECISION-1)) - 1)) + ((region & 0x1)<<(L1EMCAND_PRECISION-1)) + ((card & 0x7)<<(L1EMCAND_PRECISION));
 }
 
 // destructor

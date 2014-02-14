@@ -58,6 +58,8 @@ private:
   
   double m_emEtScaleInputLsb;
   std::vector<double> m_emEtThresholds;
+  unsigned int m_emEtMaxRank;
+  unsigned int m_emEtMaxLinScale;
 
   double m_jetEtScaleInputLsb;
   std::vector<double> m_jetEtThresholds;

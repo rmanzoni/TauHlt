@@ -5,6 +5,10 @@
 
 #include "DataFormats/L1CaloTrigger/interface/L1CaloRegionDetId.h"
 
+// hack to give RCT EIC candidates more bits of precision
+#define L1EMCAND_PRECISION (9)
+
+
 /*! \class L1CaloEmCand
  * \brief Level-1 Region Calorimeter Trigger EM candidate
  *
@@ -41,13 +45,13 @@ public:
   uint16_t raw() const { return m_data; }
   
   /// get rank bits
-  unsigned rank() const { return m_data & 0x3f; }
+  unsigned rank() const { return m_data & ((1 << (L1EMCAND_PRECISION-1)) - 1); }
 
   /// get RCT receiver card
-  unsigned rctCard() const { return (m_data>>7) & 0x7; }
+  unsigned rctCard() const { return (m_data>>L1EMCAND_PRECISION) & 0x7; }
 
   /// get RCT region ID
-  unsigned rctRegion() const { return (m_data>>6) & 0x1; }
+  unsigned rctRegion() const { return (m_data>>(L1EMCAND_PRECISION-1)) & 0x1; }
 
   /// get RCT crate
   unsigned rctCrate() const { return m_rctCrate; }

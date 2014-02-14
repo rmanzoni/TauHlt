@@ -27,6 +27,12 @@ L1ScalesTrivialProducer::L1ScalesTrivialProducer(const edm::ParameterSet& ps)
   // get numbers from the config file -  all units are GeV
   m_emEtScaleInputLsb = ps.getParameter<double>("L1CaloEmEtScaleLSB"); 
   m_emEtThresholds = ps.getParameter< std::vector<double> >("L1CaloEmThresholds");
+  // These are used to enable use of the general ctor of the L1CaloEtScale
+  // http://cmslxr.fnal.gov/lxr/source/CondFormats/L1TObjects/interface/L1CaloEtScale.h#038
+  // This specifies the maximum number of bits used to encode the number
+  m_emEtMaxRank = ps.getParameter<unsigned int>("L1CaloEmMaxRank");
+  // Maximum it can be in the linear scale
+  m_emEtMaxLinScale = ps.getParameter<unsigned int>("L1CaloEmMaxLinScale");
 
   m_jetEtScaleInputLsb = ps.getParameter<double>("L1CaloRegionEtScaleLSB"); 
   m_jetEtThresholds = ps.getParameter< std::vector<double> >("L1CaloJetThresholds");
@@ -55,7 +61,7 @@ std::auto_ptr<L1CaloEtScale> L1ScalesTrivialProducer::produceEmScale(const L1EmE
 {
    using namespace edm::es;
 
-   std::auto_ptr<L1CaloEtScale> emScale = std::auto_ptr<L1CaloEtScale>( new L1CaloEtScale(m_emEtScaleInputLsb, m_emEtThresholds) );
+   std::auto_ptr<L1CaloEtScale> emScale = std::auto_ptr<L1CaloEtScale>( new L1CaloEtScale(m_emEtMaxLinScale, m_emEtMaxRank, m_emEtScaleInputLsb, m_emEtThresholds) );
 
    return emScale ;
 }
