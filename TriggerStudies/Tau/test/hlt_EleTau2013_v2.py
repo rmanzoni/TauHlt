@@ -1,8 +1,8 @@
 # /users/mbluj/CMSSW_5_2_8/EleTau2013/V2 (CMSSW_5_2_8)
 
 # User switches
-isMC = False
-isFake = False
+isMC   = True
+isFake = True
 
 
 import FWCore.ParameterSet.Config as cms
