@@ -1,6 +1,17 @@
 
-#process.load("L1Trigger.UCT2015.emulation_cfi")
-process.load("L1Trigger.UCT2015.emulationMC_cfi")
+process.load("L1Trigger.UCT2015.emulation_cfi")
+#process.load("L1Trigger.UCT2015.emulationMC_cfi") #MB wrong config for 53X MC, use standard one with reruning hcal digis
+process.load("SimCalorimetry.HcalSimProducers.hcalUnsuppressedDigis_cfi")
+process.load("SimCalorimetry.HcalTrigPrimProducers.hcaltpdigi_cff")
+
+process.hcalReEmulDigis = process.simHcalTriggerPrimitiveDigis.clone()
+process.hcalReEmulDigis.inputLabel = cms.VInputTag(cms.InputTag('hcalDigis'), cms.InputTag('hcalDigis'))
+process.HcalTPGCoderULUT.LUTGenerationMode = cms.bool(True)
+process.hackHCALMIPs.src = cms.InputTag("hcalReEmulDigis")
+
+process.emulationSequence.replace(process.hcalDigis,
+                                  process.hcalDigis+process.hcalReEmulDigis) #Reproduce HCal digis 
+
 
 # Determine which calibration to use
 from L1Trigger.UCT2015.emulation_cfi import \
