@@ -43,8 +43,14 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
       m_deltaPhi     = regionPSet.getParameter<double>("deltaPhiRegion");
       m_jetSrc       = regionPSet.getParameter<edm::InputTag>("JetSrc");
       m_vertexSrc    = regionPSet.getParameter<edm::InputTag>("vertexSrc");
+      if (regionPSet.exists("maxVertex")){
+        m_maxVtx     = regionPSet.getParameter<int>   ("maxVertex");
+      }
+      else{
+	m_maxVtx = 0; // RM: should be put to 0 as default and changed in the config
+      }
       if (regionPSet.exists("searchOpt")){
-	m_searchOpt    = regionPSet.getParameter<bool>("searchOpt");
+	m_searchOpt  = regionPSet.getParameter<bool>("searchOpt");
       }
       else{
 	m_searchOpt = false;
@@ -72,12 +78,24 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
       edm::Handle<reco::VertexCollection> h_vertices;
       e.getByLabel(m_vertexSrc, h_vertices);
       const reco::VertexCollection & vertices = * h_vertices;
+      std::vector<GlobalPoint> myVertices ; // RM
       if (not vertices.empty()) {
-//        originZ      = vertices.front().z();
-	GlobalPoint myTmp(vertices.at(0).position().x(),vertices.at(0).position().y(), vertices.at(0).position().z());
-          vertex = myTmp;
-          deltaZVertex = m_halfLength;
-          deltaRho = m_originRadius;
+//         //originZ      = vertices.front().z();
+// 	GlobalPoint myTmp(vertices.at(0).position().x(),vertices.at(0).position().y(), vertices.at(0).position().z());
+//           vertex = myTmp;
+//           deltaZVertex = m_halfLength;
+//           deltaRho = m_originRadius;
+
+        // generalize this and let it loop on the first few vertices, not only the first one
+        for (unsigned int iVtx =0; iVtx < vertices.size(); ++iVtx)  {    
+          if ( iVtx>m_maxVtx ) break ;
+          GlobalPoint myTmp(vertices.at(iVtx).position().x(),vertices.at(iVtx).position().y(), vertices.at(iVtx).position().z());
+          myVertices.push_back(myTmp) ;
+        }  
+        deltaZVertex = m_halfLength;
+        deltaRho     = m_originRadius;
+
+
       } else {
   //      originZ      =  0.;
           GlobalPoint myTmp(0.,0.,0.);
@@ -95,18 +113,21 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
 	  const reco::Candidate & myJet = (*h_jets)[iJet];
           GlobalVector jetVector(myJet.momentum().x(),myJet.momentum().y(),myJet.momentum().z());
 //          GlobalPoint  vertex(0, 0, originZ);
-          RectangularEtaPhiTrackingRegion* etaphiRegion = new RectangularEtaPhiTrackingRegion( jetVector,
-                                                                                               vertex,
-                                                                                               m_ptMin,
-                                                                                               deltaRho,
-                                                                                               deltaZVertex,
-                                                                                               m_deltaEta,
-                                                                                               m_deltaPhi,
-											       m_howToUseMeasurementTracker,
-											       true,
-											       m_measurementTracker,
-											       m_searchOpt);
-          result.push_back(etaphiRegion);
+          for (unsigned int iVtx =0; iVtx < myVertices.size(); ++iVtx){
+            GlobalPoint vertex(myVertices.at(iVtx).x(),myVertices.at(iVtx).y(), myVertices.at(iVtx).z());
+            RectangularEtaPhiTrackingRegion* etaphiRegion = new RectangularEtaPhiTrackingRegion( jetVector,
+                                                                                                 vertex,
+                                                                                                 m_ptMin,
+                                                                                                 deltaRho,
+                                                                                                 deltaZVertex,
+                                                                                                 m_deltaEta,
+                                                                                                 m_deltaPhi,
+											         m_howToUseMeasurementTracker,
+											         true,
+											         m_measurementTracker,
+											         m_searchOpt);
+            result.push_back(etaphiRegion);
+          }
       }
 
       return result;
@@ -120,6 +141,7 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
   float m_halfLength;
   float m_deltaEta;
   float m_deltaPhi;
+  float m_maxVtx;
   edm::InputTag m_jetSrc;
   edm::InputTag m_vertexSrc;
   std::string m_measurementTracker;
