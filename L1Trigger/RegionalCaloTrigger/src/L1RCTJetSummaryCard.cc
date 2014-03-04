@@ -174,9 +174,13 @@ void L1RCTJetSummaryCard::fillMIPBits(std::vector<unsigned short> mip){
 
 void L1RCTJetSummaryCard::fillTauBits(std::vector<unsigned short> tau){
   bitset<14> taus;
-  for(int i = 0; i<14; i++)
+  for(int i = 0; i<14; i++){
     taus[i] = tau.at(i);
+//    std::cout<<"L1RCTJetSummaryCard:  "<<taus[i];
+  }
+
   tauBits = taus.to_ulong();
+
 }
 
 void L1RCTJetSummaryCard::fillOverFlowBits(std::vector<unsigned short> overflow){

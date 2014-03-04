@@ -1,4 +1,4 @@
-#include "L1Trigger/RegionalCaloTrigger/interface/L1RCTInputProducer.h" 
+#include "L1Trigger/RegionalCaloTrigger/interface/L1RCTInputProducer.h"
 
 #include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
@@ -18,7 +18,7 @@
 #include "CondFormats/DataRecord/interface/L1RCTChannelMaskRcd.h"
 
 #include "L1Trigger/RegionalCaloTrigger/interface/L1RCT.h"
-#include "L1Trigger/RegionalCaloTrigger/interface/L1RCTLookupTables.h" 
+#include "L1Trigger/RegionalCaloTrigger/interface/L1RCTLookupTables.h"
 
 #include <vector>
 using std::vector;
@@ -27,7 +27,7 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-L1RCTInputProducer::L1RCTInputProducer(const edm::ParameterSet& conf) : 
+L1RCTInputProducer::L1RCTInputProducer(const edm::ParameterSet& conf) :
   rctLookupTables(new L1RCTLookupTables),
   rct(new L1RCT(rctLookupTables)),
   useEcal(conf.getParameter<bool>("useEcal")),
@@ -89,7 +89,7 @@ void L1RCTInputProducer::produce(edm::Event& event, const edm::EventSetup& event
 
   edm::Handle<EcalTrigPrimDigiCollection> ecal;
   edm::Handle<HcalTrigPrimDigiCollection> hcal;
-  
+
   if (useEcal) { event.getByLabel(ecalDigisLabel, ecal); }
   if (useHcal) { event.getByLabel(hcalDigisLabel, hcal); }
 
@@ -102,37 +102,37 @@ void L1RCTInputProducer::produce(edm::Event& event, const edm::EventSetup& event
 
   // Stuff to create
 
-  std::auto_ptr<std::vector<unsigned short> > 
+  std::auto_ptr<std::vector<unsigned short> >
     rctCrate(new std::vector<unsigned short>);
-  std::auto_ptr<std::vector<unsigned short> > 
+  std::auto_ptr<std::vector<unsigned short> >
     rctCard(new std::vector<unsigned short>);
-  std::auto_ptr<std::vector<unsigned short> > 
+  std::auto_ptr<std::vector<unsigned short> >
     rctTower(new std::vector<unsigned short>);
-  std::auto_ptr<std::vector<unsigned int> > 
+  std::auto_ptr<std::vector<unsigned int> >
     rctEGammaET(new std::vector<unsigned int>);
   std::auto_ptr<std::vector<bool> > rctHoEFGVetoBit(new std::vector<bool>);
-  std::auto_ptr<std::vector<unsigned int> > 
+  std::auto_ptr<std::vector<unsigned int> >
     rctJetMETET(new std::vector<unsigned int>);
   std::auto_ptr<std::vector<bool> > rctTowerActivityBit(new std::vector<bool>);
   std::auto_ptr<std::vector<bool> > rctTowerMIPBit(new std::vector<bool>);
-  
+
   for(int crate = 0; crate < 18; crate++) {
     for(int card = 0; card < 7; card++) {
       for(int tower = 0; tower < 32; tower++) {
-	unsigned short ecalCompressedET = 
+	unsigned short ecalCompressedET =
 	  rct->ecalCompressedET(crate, card, tower);
-	unsigned short ecalFineGrainBit = 
+	unsigned short ecalFineGrainBit =
 	  rct->ecalFineGrainBit(crate, card, tower);
-	unsigned short hcalCompressedET = 
+	unsigned short hcalCompressedET =
 	  rct->hcalCompressedET(crate, card, tower);
-	unsigned int lutBits = 
-	  rctLookupTables->lookup(ecalCompressedET, hcalCompressedET, 
+	unsigned int lutBits =
+	  rctLookupTables->lookup(ecalCompressedET, hcalCompressedET,
 				  ecalFineGrainBit, crate, card, tower);
-	unsigned int eGammaETCode = lutBits & 0x0000007F;
-	bool hOeFGVetoBit = (lutBits >> 7) & 0x00000001;
-	unsigned int jetMETETCode = (lutBits >> 8) & 0x000001FF;
-	bool activityBit = (lutBits >> 17) & 0x00000001;
-	if(eGammaETCode > 0 || jetMETETCode > 0 || 
+	unsigned int eGammaETCode = lutBits & RCT_EG_PRECISION_MASK;
+	bool hOeFGVetoBit = (lutBits >> RCT_EG_PRECISION) & 0x00000001;
+	unsigned int jetMETETCode = (lutBits >> (RCT_EG_PRECISION+1)) & 0x000001FF;
+	bool activityBit = (lutBits >> (RCT_EG_PRECISION+1+9)) & 0x00000001;
+	if(eGammaETCode > 0 || jetMETETCode > 0 ||
 	   hOeFGVetoBit || activityBit) {
 	  rctCrate->push_back(crate);
 	  rctCard->push_back(card);
@@ -147,16 +147,16 @@ void L1RCTInputProducer::produce(edm::Event& event, const edm::EventSetup& event
     }
   }
 
-  std::auto_ptr<std::vector<unsigned short> > 
+  std::auto_ptr<std::vector<unsigned short> >
     rctHFCrate(new std::vector<unsigned short>);
-  std::auto_ptr<std::vector<unsigned short> > 
+  std::auto_ptr<std::vector<unsigned short> >
     rctHFRegion(new std::vector<unsigned short>);
   std::auto_ptr<std::vector<unsigned int> > rctHFET(new std::vector<unsigned int>);
   std::auto_ptr<std::vector<bool> > rctHFFG(new std::vector<bool>);
   for(int crate = 0; crate < 18; crate++) {
     for(int hfRegion = 0; hfRegion < 8; hfRegion++) {
       unsigned short hfCompressedET = rct->hfCompressedET(crate, hfRegion);
-      unsigned int hfETCode = 
+      unsigned int hfETCode =
 	rctLookupTables->lookup(hfCompressedET, crate, 999, hfRegion);
       if(hfETCode > 0) {
 	rctHFCrate->push_back(crate);
