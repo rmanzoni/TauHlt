@@ -478,8 +478,8 @@ process.patOut.outputCommands.append("keep *_selectedTausFixedCone_*_*")
 process.patOut.outputCommands.append("keep *_addPileupInfo_*_*")
 process.patOut.outputCommands.append("keep *_hlt*PFJetCtfWithMaterialTracks_*_*")
 process.patOut.outputCommands.append("keep *_hlt*PFJetCkfTrackCandidates_*_*")
-process.patOut.outputCommands.append("keep *_PFJetPixelSeedsFromPixelTracks*_*")
-process.patOut.outputCommands.append("keep *_hlt*PFJetPixelSeeds*_*")
+process.patOut.outputCommands.append("keep *_PFJetPixelSeedsFromPixelTracks*_*_*")
+process.patOut.outputCommands.append("keep *_hlt*PFJetPixelSeeds*_*_*")
 
 
 ## Pat trigger
