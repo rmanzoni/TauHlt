@@ -24,7 +24,8 @@ class DiTauTrigMatch {
 		   unsigned int nTotalObjects,
 		   unsigned int nVtx=0,
                    std::vector<const pat::Tau*>* matchedTau=0,
-                   float rho=-99);
+                   float rho=-99,
+		   std::vector<const reco::Candidate*>* matchedL1=0);
     ~DiTauTrigMatch(){};
 
     // Get ditau object
@@ -62,6 +63,10 @@ class DiTauTrigMatch {
     float matchedTauEta(unsigned int a) const;
     float matchedTauID(unsigned int a, std::string discriminatorName) const;
 
+    const reco::Candidate* getMatchedL1(unsigned int a) const;
+    float matchedL1Pt(unsigned int a) const;
+    float matchedL1Eta(unsigned int a) const;
+
     // Get status of Discriminator 
     float tagTauID(std::string discriminatorName) const;
 
@@ -89,6 +94,7 @@ class DiTauTrigMatch {
     std::vector<const reco::Candidate*>* tauTrigObj_;
     std::vector<const reco::Candidate*>* lepTrigObj_;
     std::vector<const pat::Tau*>* matchedTau_;
+    std::vector<const reco::Candidate*>* matchedL1_;
     const reco::Candidate* genLeptonMatch_;
     const reco::Candidate* genTauMatch_;
     reco::Candidate* dummyCandidate_;

@@ -47,6 +47,7 @@ private:
   edm::InputTag diTauSrc_;
   typedef std::vector<edm::InputTag> VInputTag;
   VInputTag trgTauSrc_;
+  VInputTag l1TauSrc_;
   
   edm::InputTag metSrc_;
   VInputTag vtxSrc_;
@@ -59,7 +60,8 @@ private:
   bool isMC_;
 
   std::vector<const reco::CompositeCandidate*> diTaus_;
-  std::vector<edm::Handle< std::vector<pat::Tau> > > trgTauHandle_;
+  std::vector<edm::Handle<std::vector<pat::Tau> > > trgTauHandle_;
+  std::vector<edm::Handle<edm::View<reco::Candidate> > > l1TauHandle_;
   const pat::MET* met_;
   std::vector<edm::Handle<reco::VertexCollection> > vertices_;
   std::vector<float> vz_;
@@ -130,6 +132,7 @@ DiTauMatchTool::DiTauMatchTool(const edm::ParameterSet& iConfig):
 
   diTauSrc_     =   iConfig.getParameter<edm::InputTag>("diTauSrc");
   trgTauSrc_    =   iConfig.getUntrackedParameter<VInputTag>("trgTauSrc",VInputTag() );
+  l1TauSrc_     =   iConfig.getUntrackedParameter<VInputTag>("l1TauSrc",VInputTag() );
   triggerSrc_   =   iConfig.getParameter<edm::InputTag>("trigSrc");
   metSrc_       =   iConfig.getParameter<edm::InputTag>("metSrc");
   vtxSrc_       =   iConfig.getParameter<VInputTag>("vtxSrc");
@@ -180,6 +183,7 @@ void DiTauMatchTool::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     std::vector<const reco::Candidate* > allBestTauFilterMatches;
     std::vector<const reco::Candidate* > allBestLepFilterMatches;
     std::vector<const pat::Tau*> allBestTrigTauMatches;
+    std::vector<const reco::Candidate* > allBestL1TauMatches;
 
     for(unsigned int j=0; j<allTauTrigObjects.size(); ++j){
       const reco::Candidate* bestFilterMatch = NULL;
@@ -207,6 +211,18 @@ void DiTauMatchTool::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	bestMatch = trigTaus[idx];
       allBestTrigTauMatches.push_back(bestMatch); // enter the best matched trigger object for each filter into a vector                    
     }       
+    for(unsigned int j=0; j<l1TauHandle_.size(); ++j){
+      const reco::Candidate* bestMatch = NULL;
+      std::vector<const reco::Candidate*> l1Taus;
+      for(size_t k=0; k < (l1TauHandle_[j])->size(); ++k){
+        const reco::Candidate& aL1 = (l1TauHandle_[j])->at(k);
+        l1Taus.push_back(&aL1);
+      } 
+      int idx = findBestMatch(diTau->daughter(1), l1Taus, maxDR_);
+      if( !(idx<0) )
+	bestMatch = l1Taus[idx];
+      allBestL1TauMatches.push_back(bestMatch); // enter the best matched trigger object for each filter into a vector                    
+    }       
 
     theMatch = new DiTauTrigMatch(diTau,
 				  met_,
@@ -216,7 +232,8 @@ void DiTauMatchTool::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 				  diTaus_.size(),
 				  (vertices_[0])->size(),
 				  &allBestTrigTauMatches,
-                                  rho_); // create a DiTauTrigMatch object for each di-tau pair
+                                  rho_,
+				  &allBestL1TauMatches); // create a DiTauTrigMatch object for each di-tau pair
     //matches.push_back(theMatch); 
     ntuple_.fill(*theMatch); //fill TTree
   }
@@ -257,6 +274,15 @@ bool DiTauMatchTool::getCollections(const edm::Event& iEvent){
     edm::Handle< std::vector<pat::Tau> > aTrgTauHandle;
     iEvent.getByLabel(*trgTauSrc_it, aTrgTauHandle);
     trgTauHandle_.push_back(aTrgTauHandle);
+  }
+  /// Get l1 taus
+  l1TauHandle_.clear();
+  for(VInputTag::const_iterator l1TauSrc_it = l1TauSrc_.begin();
+	  l1TauSrc_it != l1TauSrc_.end(); ++l1TauSrc_it){
+
+    edm::Handle<edm::View<reco::Candidate> > aL1TauHandle;
+    iEvent.getByLabel(*l1TauSrc_it, aL1TauHandle);
+    l1TauHandle_.push_back(aL1TauHandle);
   }
 
   /// Get trigger event

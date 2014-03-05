@@ -36,13 +36,25 @@ using std::endl;
 void L1RCT::processEvent(){
   for(int i=0; i<18;i++)
     crates.at(i).processReceiverCards();
-  shareNeighbors();  
+  shareNeighbors();
   for(int i=0; i<18;i++){
     crates.at(i).fillElectronIsolationCards();
     crates.at(i).processElectronIsolationCards();
     crates.at(i).fillJetSummaryCard();
     crates.at(i).processJetSummaryCard();
   }
+  /*
+  // TEMP output
+  unsigned int totalRegionET = 0;
+  for(int i = 0; i < 18; i++) {
+    std::vector<L1CaloRegion> regions = getRegions(i);
+    for(int j = 0; j < 14; j++) {  // excludes hf
+      totalRegionET += regions.at(j).et();
+    }
+  }
+  std::cout << "Total Region ET excluding HF after RCT = " << totalRegionET << std::endl;
+  */
+
 }
 
 void L1RCT::makeCrates()
@@ -53,7 +65,7 @@ void L1RCT::makeCrates()
   }
 }
 
-L1RCT::L1RCT(const L1RCTLookupTables* rctLookupTables) : 
+L1RCT::L1RCT(const L1RCTLookupTables* rctLookupTables) :
   rctLookupTables_(rctLookupTables),
   empty(),
   neighborMap(),
@@ -135,10 +147,10 @@ void L1RCT::digiInput(const EcalTrigPrimDigiCollection& ecalCollection,
   int nEcalDigi = ecalCollection.size();
   if (nEcalDigi>4032) {nEcalDigi=4032;}
   for (int i = 0; i < nEcalDigi; i++){
-    short ieta = (short) ecalCollection[i].id().ieta(); 
+    short ieta = (short) ecalCollection[i].id().ieta();
     // Note absIeta counts from 1-28 (not 0-27)
     unsigned short absIeta = (unsigned short) abs(ieta);
-    unsigned short cal_iphi = (unsigned short) ecalCollection[i].id().iphi(); 
+    unsigned short cal_iphi = (unsigned short) ecalCollection[i].id().iphi();
     unsigned short iphi = (72 + 18 - cal_iphi) % 72; // transform TOWERS (not regions) into local rct (intuitive) phi bins
 
     //map digis to crates, cards, and towers
@@ -164,7 +176,7 @@ void L1RCT::digiInput(const EcalTrigPrimDigiCollection& ecalCollection,
   //if (nHcalDigi != 4176){ std::cout << "L1RCT: Warning: There are " << nHcalDigi << "hcal digis instead of 4176!" << std::endl;}
   // incl HF 4032 + 144 = 4176
   for (int i = 0; i < nHcalDigi; i++){
-    short ieta = (short) hcalCollection[i].id().ieta(); 
+    short ieta = (short) hcalCollection[i].id().ieta();
     unsigned short absIeta = (unsigned short) abs(ieta);
     unsigned short cal_iphi = (unsigned short) hcalCollection[i].id().iphi();
     // All Hcal primitives (including HF) are reported
@@ -205,14 +217,14 @@ void L1RCT::digiInput(const EcalTrigPrimDigiCollection& ecalCollection,
     }
 
   }
-  
+
   input();
 
   return;
 
 }
 
-//As the name implies, it will randomly generate input for the 
+//As the name implies, it will randomly generate input for the
 //regional calotrigger.
 void L1RCT::randomInput()
 {
@@ -324,7 +336,7 @@ void L1RCT::print(){
   for(int i = 0; i<18; i++){
     std::cout << "Crate " << i << std::endl;
     crates.at(i).print();
-  } 
+  }
 }
 
 // Returns the top four isolated electrons from given crate
@@ -375,6 +387,7 @@ vector<L1CaloRegion> L1RCT::getRegions(unsigned crate){
       bool quiet = quiets[card*2+rgn];
       bool overflow = overflows[card*2+rgn];
       unsigned barrelEnergy = barrelEnergies.at(card*2+rgn);
+      //if(barrelEnergy!=0) cout<<"L1RCT: Is this a tau? "<<tau<<"   barrelEnergy: "<<barrelEnergy<<endl;
       L1CaloRegion region(barrelEnergy, overflow, tau, mip, quiet, crate, card, rgn);
       regionCollection.push_back(region);
     }
@@ -384,7 +397,7 @@ vector<L1CaloRegion> L1RCT::getRegions(unsigned crate){
   std::vector<unsigned short> hfEnergies = crates.at(crate).getHFRegions();
   // fine grain bits -- still have to work out digi input
   std::vector<unsigned short> hfFineGrainBits = crates.at(crate).getHFFineGrainBits();
-  for (unsigned hfRgn = 0; hfRgn<8; hfRgn++){  // region number, see diagram on paper.  make sure know how hf regions come in. 
+  for (unsigned hfRgn = 0; hfRgn<8; hfRgn++){  // region number, see diagram on paper.  make sure know how hf regions come in.
     unsigned energy = hfEnergies.at(hfRgn);
     bool fineGrain = hfFineGrainBits.at(hfRgn);
     L1CaloRegion hfRegion(energy, fineGrain, crate, hfRgn);

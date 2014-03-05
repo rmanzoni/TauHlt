@@ -14,13 +14,14 @@ DiTauTrigMatch::DiTauTrigMatch(const reco::CompositeCandidate* diTau,
 			       unsigned int nTotalObjects,
 			       unsigned int nVtx,
                                std::vector<const pat::Tau*>* matchedTau,
-                               float rho):
-  diTau_(diTau), met_(met), tauTrigObj_(tauTrigObj), lepTrigObj_(lepTrigObj), matchedTau_(matchedTau),/*genTauMatch_(genTauMatch),*/index_(index), nTotalObjects_(nTotalObjects), nVtx_(nVtx), rho_(rho){
+                               float rho,
+			       std::vector<const reco::Candidate*>* matchedL1):
+  diTau_(diTau), met_(met), tauTrigObj_(tauTrigObj), lepTrigObj_(lepTrigObj), /*genTauMatch_(genTauMatch),*/index_(index), nTotalObjects_(nTotalObjects), nVtx_(nVtx), matchedTau_(matchedTau), rho_(rho), matchedL1_(matchedL1){
   
   //use convention that the first leg is lepton tag, the second one is tau
   tagLepton_ = diTau->daughter(0);
   tagTau_    = dynamic_cast<const pat::Tau*>(diTau->daughter(1)->masterClone().get() );
-  genTauMatch_ = tagTau_->genParticleRef().isNonnull()? tagTau_->genParticleRef().get() : 0 ;
+  genTauMatch_ = tagTau_->genParticleRef().isNonnull() ? tagTau_->genParticleRef().get() : 0 ;
   //MB unused int lepType = 0;
   if(dynamic_cast<const pat::Muon*>(diTau->daughter(0)->masterClone().get() ) ) {
     //MB unused lepType=13;
@@ -137,6 +138,17 @@ float DiTauTrigMatch::matchedTauEta(unsigned int a) const {
 float DiTauTrigMatch::matchedTauID(unsigned int a, std::string discriminatorName) const {
   return (getMatchedTau(a) != NULL) ? getMatchedTau(a)->tauID(discriminatorName) : -99.0;
 }
+
+const reco::Candidate* DiTauTrigMatch::getMatchedL1(unsigned int a) const {
+  return (a < matchedL1_->size() ) ? matchedL1_->at(a) : NULL;
+}
+float DiTauTrigMatch::matchedL1Pt(unsigned int a) const {
+  return (getMatchedL1(a) != NULL) ? getMatchedL1(a)->pt() : -99.0;
+}
+float DiTauTrigMatch::matchedL1Eta(unsigned int a) const {
+  return (getMatchedL1(a) != NULL) ? getMatchedL1(a)->eta() : -99.0;
+}
+
 
 float DiTauTrigMatch::tagTauID(std::string discriminatorName) const{
  return tagTau_->tauID(discriminatorName);  

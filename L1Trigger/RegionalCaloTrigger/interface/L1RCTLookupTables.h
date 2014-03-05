@@ -1,6 +1,13 @@
 #ifndef L1RCTLookupTables_h
 #define L1RCTLookupTables_h
 
+// classic style
+//#define RCT_EG_PRECISION 7
+//#define RCT_EG_PRECISION_MASK 0x7F
+
+#define RCT_EG_PRECISION 9
+#define RCT_EG_PRECISION_MASK 0x1FF
+
 class L1RCTParameters;
 struct L1RCTChannelMask;
 struct L1RCTNoisyChannelMask;
@@ -9,13 +16,13 @@ class L1CaloHcalScale;
 class L1CaloEtScale;
 
 class L1RCTLookupTables {
- 
+
  public:
 
   // constructor
 
   L1RCTLookupTables() : rctParameters_(0), channelMask_(0), ecalScale_(0), hcalScale_(0), etScale_(0) {}
-  
+
   // this needs to be refreshed every event -- constructor inits to zero
   // to indicate that it cannot be used -- if this set function is
   // called, lookup after that call will use it.
@@ -50,7 +57,7 @@ class L1RCTLookupTables {
     }
 
   const L1RCTParameters* rctParameters() const {return rctParameters_;}
-  
+
   unsigned int lookup(unsigned short ecalInput,
 		      unsigned short hcalInput,
 		      unsigned short fgbit,
@@ -59,7 +66,7 @@ class L1RCTLookupTables {
 		      unsigned short twrNo
 		      ) const;
 
-  unsigned int lookup(unsigned short hfInput, 
+  unsigned int lookup(unsigned short hfInput,
 		      unsigned short crtNo,
 		      unsigned short crdNo,
 		      unsigned short twrNo
@@ -69,13 +76,13 @@ class L1RCTLookupTables {
   unsigned int eGammaETCode(float ecal, float hcal, int iAbsEta) const;
   unsigned int jetMETETCode(float ecal, float hcal, int iAbsEta) const;
   bool hOeFGVetoBit(float ecal, float hcal, bool fgbit) const;
-  bool activityBit(float ecal, float hcal) const;
+  bool activityBit(float ecal, float hcal, bool fgbit) const;
 
  private:
 
   // helper functions
 
-  float convertEcal(unsigned short ecal, unsigned short iAbsEta, short sign) const;  
+  float convertEcal(unsigned short ecal, unsigned short iAbsEta, short sign) const;
   float convertHcal(unsigned short hcal, unsigned short iAbsEta, short sign) const;
   unsigned long convertToInteger(float et, float lsb, int precision) const;
 

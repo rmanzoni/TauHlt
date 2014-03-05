@@ -325,6 +325,8 @@ void L1RCTProducer::produce(edm::Event& event, const edm::EventSetup& eventSetup
 {
 
 
+//  std::cout<<std::endl<<std::endl<<"BEGIN OF THE PRODUCER"<<endl;
+
   std::auto_ptr<L1CaloEmCollection> rctEmCands (new L1CaloEmCollection);
   std::auto_ptr<L1CaloRegionCollection> rctRegions (new L1CaloRegionCollection);
 

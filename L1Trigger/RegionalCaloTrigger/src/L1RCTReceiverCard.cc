@@ -53,9 +53,9 @@ void L1RCTReceiverCard::fileInput(char* filename){
 // 28 24 20 16 12 08 04 00
 // 29 25 21 17 13 09 05 01
 // 30 26 22 18 14 10 06 02
-// 31 27 23 19 15 11 07 03 
+// 31 27 23 19 15 11 07 03
 //
-// For card 6 of crate 0 it would look like 
+// For card 6 of crate 0 it would look like
 //
 // 12 08 04 00
 // 13 09 05 01
@@ -68,7 +68,7 @@ void L1RCTReceiverCard::fileInput(char* filename){
 
 
 void L1RCTReceiverCard::fillInput(std::vector<unsigned short> input){
-  
+
   std::vector<unsigned short> ecalInput(32);
   std::vector<unsigned short> ecalFG(32);
   std::vector<unsigned short> hcalInput(32);
@@ -80,10 +80,10 @@ void L1RCTReceiverCard::fillInput(std::vector<unsigned short> input){
     hcalInput.at(i) = input.at(i+32)/2;
     hcalMuon.at(i) = input.at(i+32) & 1;
     unsigned long lookup = rctLookupTables_->lookup(ecalInput.at(i),hcalInput.at(i),ecalFG.at(i),crtNo, cardNo, i); // tower number 0-31 now
-    unsigned short etIn7Bits = lookup&127;
-    unsigned short etIn9Bits = (lookup >> 8)&511;
-    unsigned short HE_FGBit = (lookup>>7)&1;
-    unsigned short activityBit = (lookup>>17)&1;
+    unsigned short etIn7Bits = lookup&RCT_EG_PRECISION_MASK;
+    unsigned short etIn9Bits = (lookup >> (RCT_EG_PRECISION+1))&511;
+    unsigned short HE_FGBit = (lookup>> RCT_EG_PRECISION)&1;
+    unsigned short activityBit = (lookup>>(RCT_EG_PRECISION+9+1))&1;
     std::vector<unsigned short> indices = towerToRegionMap(i);
     unsigned short r = indices.at(0);
     unsigned short row = indices.at(1);
@@ -159,8 +159,8 @@ vector<unsigned short> L1RCTReceiverCard::towerToRegionMap(int towernum){
   returnVec.at(1)=towerrow;
   returnVec.at(2)=towercol;
   return returnVec;
-}    
-  
+}
+
 
 
 void L1RCTReceiverCard::fillTauBits(){
@@ -189,13 +189,13 @@ unsigned short L1RCTReceiverCard::calcTauBit(L1RCTRegion region){
   }
 
   bool answer;
-  
-  if(etaPattern != badPattern5 && etaPattern != badPattern7 && 
+
+  if(etaPattern != badPattern5 && etaPattern != badPattern7 &&
      etaPattern != badPattern10 && etaPattern != badPattern11 &&
      etaPattern != badPattern13 && etaPattern != badPattern14 &&
-     etaPattern != badPattern15 && phiPattern != badPattern5 && 
-     phiPattern != badPattern7 && phiPattern != badPattern10 && 
-     phiPattern != badPattern11 && phiPattern != badPattern13 && 
+     etaPattern != badPattern15 && phiPattern != badPattern5 &&
+     phiPattern != badPattern7 && phiPattern != badPattern10 &&
+     phiPattern != badPattern11 && phiPattern != badPattern13 &&
      phiPattern != badPattern14 && phiPattern != badPattern15 &&
      etaPattern != badPattern9 && phiPattern != badPattern9){       // adding in "9"
     //return false;
@@ -205,7 +205,7 @@ unsigned short L1RCTReceiverCard::calcTauBit(L1RCTRegion region){
   else {
     answer = true;
   }
-  // std::cout << "Tau veto set to " << answer << std::endl;
+  unsigned short regionSum = calcRegionSum(region)/2; // divide by two as overflow bit is at the bottom
   return answer;
 }
 
@@ -224,7 +224,7 @@ unsigned short L1RCTReceiverCard::calcRegionSum(L1RCTRegion region){
       unsigned short towerEt = region.getEtIn9Bits(i,j);
       // If tower is saturated, peg the region to max value
       //if(towerEt == 0x1FF) sum = 0x3FF;  // HARDWARE DOESN'T DO THIS!!
-      //else 
+      //else
       sum = sum + towerEt;
     }
   }
