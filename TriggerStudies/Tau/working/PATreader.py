@@ -103,183 +103,53 @@ class PATreader() :
       for onlTauColl in self.onlineTauCollections :
         HLTTaus = self.pickHLTTausCollection(onlTauColl)       
         onl_tau = self.best_matching([tau], HLTTaus , dR=0.5).values()[0]
-
-#         if onl_tau is not False : 
-#           continue
-#         else :
-#           print 'event: ', event.eventAuxiliary().event(),'\t passes reco HLT', onl_tau is not False , '\tpt offline tau\t', tau.pt()  
-        
-        ## 31jan PATs are bugged, bypass the matching and keep on developing
-        if self.keepAllTaus :
-          try:
-            onl_tau  = HLTTaus [0]
-          except : continue
-        ####################################################################
              
         tau.onlTau              = onl_tau
         #tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlPFcandidates if cand.charge()!=0], dR=0.1).values()[0]        
         tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks if cand.charge()!=0], dR=0.1).values()[0]        
         
-#         debuggami = False
-#         #if (tau.onlineLeadingTrack is False) and (abs(onlPixVtx[0].z() - offVtx[0].z())>0.2) :
-#         if (tau.onlineLeadingTrack is False) :
-#           #print '\n\nevent: ', event.eventAuxiliary().event()
-#           #print 'online leading track missing and onl-off vtx don\'t match'  
-#           debuggami = True 
-#         else :
-#           print 'onlTracks track found \t\tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#         
-#         #import pdb ; pdb.set_trace()
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlPixTracks if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlPixTracks track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#      
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks0 if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracks0 track found \t\tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#      
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracksPre1 if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracksPre1 track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#      
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks1    if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracks1 track found \t\tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#      
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracksPre2 if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracksPre2 track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-# 
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks2    if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracks2 track found \t\tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-# 
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracksPre3 if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracksPre3 track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-# 
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks3    if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracks3 track found \t\tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-# 
-#         if tau.onlineLeadingTrack is False :
-#           tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracksPre4 if cand.charge()!=0], dR=0.1).values()[0]
-#           if debuggami and tau.onlineLeadingTrack is not False : 
-#             print 'onlTracksPre4 track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
-#     
-#         self.fillTauBranches  (self.tree, onl_tau, onlTauColl)
-
-
-        if tau.onlineLeadingTrack is not False : 
-          #pass
-          #print '\n\nevent: ', event.eventAuxiliary().event(),'\t has some sort of track'  
-          print 'event: ', event.eventAuxiliary().event(),'\tonlTracks track found \tpt\t', tau.onlineLeadingTrack.pt(), '\toffline pt\t',tau.offlineLeadingTrack.pt(), '\tdeltaR', self.deltaR(tau.onlineLeadingTrack,tau.offlineLeadingTrack), '\t dz\t', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())
+        self.fillTauBranches  (self.tree, onl_tau, onlTauColl)
+        
+        ## check whether Tau is reconstructed online
+        if not onl_tau and not self.keepAllTaus :
+          self.failinRecoHLT  += 1
         else :
-          #print 'event: ', event.eventAuxiliary().event(),'\t has no online leading track and passes reco', tau.onlTau is not False , '\tpt offline tau\t', tau.pt()  
-          self.hasNoOnlineTrk += 1
-       
-        #if event.eventAuxiliary().event()==5445840 : import pdb ; pdb.set_trace()
-       
-       
-        ### prova prova prova prova
-        #self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_noOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
-        ### prova prova prova prova
-        
-        #import pdb ; pdb.set_trace()
-        
-        TauJetsIter0       = self.doSomethingForFailingEvents( onlJetsForRegions, tau, onlTracks0, onlJetsPreTrk )['caloJetsForTracking']
-        
-        
-        
-        #if TauJetsIter0 is not False : 
-        #if tau.onlineLeadingTrack is not False and abs(onlPixVtx[0].z() - tau.offlineLeadingTrack.vertex().z())<0.2 :
-        if tau.onlineLeadingTrack is not False and abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())<0.2 :
-          print '\n********************************\nevent: ', event.eventAuxiliary().event()  
-          print 'is recoed online?         ', tau.onlTau is not False    
-          print 'tau pt, eta, phi, dm      ', tau.pt(), tau.eta(), tau.phi(), tau.decayMode()  
-          print 'dz(onlPV,offPV)           ', abs(onlPixVtx[0].z() - tau.offlineLeadingTrack.vertex().z())  
-          print 'dz(onlTrackVert,offPV)    ', abs(tau.onlineLeadingTrack.vertex().z() - tau.offlineLeadingTrack.vertex().z())  
-          print 'offline track ============='
-          print 'off track pt, eta, phi    ', tau.offlineLeadingTrack.pt(), tau.offlineLeadingTrack.eta(), tau.offlineLeadingTrack.phi()  
-          print 'numberOfLostHits          ', tau.offlineLeadingTrack.numberOfLostHits()                       
-          print 'numberOfValidHits         ', tau.offlineLeadingTrack.numberOfValidHits()                      
-          print 'numberOfValidPixelHits    ', tau.offlineLeadingTrack.hitPattern().numberOfValidPixelHits()    
-          print 'pixelLayersWithMeasurement', tau.offlineLeadingTrack.hitPattern().pixelLayersWithMeasurement()
-          print 'numberOfValidTrackerHits  ', tau.offlineLeadingTrack.hitPattern().numberOfValidTrackerHits()  
-          print 'algo-4                    ', tau.offlineLeadingTrack.algo() - 4   
-          print 'online track ============='
-          print 'pt, eta, phi              ', tau.onlineLeadingTrack.pt(), tau.onlineLeadingTrack.eta(), tau.onlineLeadingTrack.phi()  
-          print 'numberOfLostHits          ', tau.onlineLeadingTrack.numberOfLostHits()                       
-          print 'numberOfValidHits         ', tau.onlineLeadingTrack.numberOfValidHits()                      
-          print 'numberOfValidPixelHits    ', tau.onlineLeadingTrack.hitPattern().numberOfValidPixelHits()    
-          print 'pixelLayersWithMeasurement', tau.onlineLeadingTrack.hitPattern().pixelLayersWithMeasurement()
-          print 'numberOfValidTrackerHits  ', tau.onlineLeadingTrack.hitPattern().numberOfValidTrackerHits()  
-          print 'algo-4                    ', tau.onlineLeadingTrack.algo() - 4   
-          ### prova prova prova prova
-          self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_hasOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
-          ### prova prova prova prova
-          ### prova prova prova prova
-          self.fillTrackHistos            (self.track_histos , onlTauColl+'_onlTrk_failDM_hasOnlTrk', tau.onlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
-          ### prova prova prova prova
+          self.fillBasicHistos(self.basic_histos, onlTauColl+'_recoHLT' ,tau, onlPixVtx[0], off_vtx[0])
+          ## check whether Tau has leading track online
+          if onl_tau.tauID('decayModeFinding') < 0.5 and not self.keepAllTaus :
+            self.fillBasicHistos(self.basic_histos, onlTauColl+'_failDM', tau, onlPixVtx[0], off_vtx[0]) 
+            self.failinDMHLT  += 1
+            TauJetsIter0       = self.doSomethingForFailingEvents( onlJetsForRegions, tau.onlTau, onlTracks0, onlJetsPreTrk )['caloJetsForTracking']
+            FullTrackJetIter0  = [tr for tr in onlTracks0]
+            for tr in TauJetsIter0 : FullTrackJetIter0.append(tr)
+            if tau.onlineLeadingTrack is not False : 
+              self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_PixVtx_failDM_hasOnlTrk', offVtx[0], onlPixVtx[0])
+              self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_MuVtx_failDM_hasOnlTrk' , offVtx[0], onlMuVtx [0])
+              self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_hasOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
+              self.fillTrackHistos            (self.track_histos , onlTauColl+'_onlTrk_failDM_hasOnlTrk', tau.onlineLeadingTrack , offVtx[0], onlPixVtx[0], onlMuVtx[0])
+            else :
+              self.hasNoOnlineTrk += 1
+              if self.best_matching([tau.onlTau],TauJetsIter0).values()[0] is not False : self.hasRegionJet += 1 
+              if self.best_matching([tau.onlTau],onlTracks0).values()[0]   is not False : self.hasRegionTrk += 1 
+              if self.best_matching([tau.onlTau],TauJetsIter0).values()[0] is not False or \
+                 self.best_matching([tau.onlTau],onlTracks0).values()[0]   is not False : self.hasRegion +=1
+              self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_PixVtx_failDM_noOnlTrk', offVtx[0], onlPixVtx[0])
+              self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_MuVtx_failDM_noOnlTrk' , offVtx[0], onlMuVtx [0])
+              self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_noOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
+          else :
+            #skip = True
+            self.fillBasicHistos            (self.basic_histos  , onlTauColl+'_passDM'                 , tau, onlPixVtx[0], off_vtx[0]) 
+            self.fillVertexAssociationHistos(self.vertex_histos , onlTauColl+'_PixVtx_passDM_hasOnlTrk', offVtx[0], onlPixVtx[0])
+            self.fillVertexAssociationHistos(self.vertex_histos , onlTauColl+'_MuVtx_passDM_hasOnlTrk' , offVtx[0], onlMuVtx [0])
+            self.fillSortingHistos          (self.sorting_histos, onlTauColl+'_2passDM'                , tau.genLeadingTrack, tau.onlineLeadingTrack)
 
-          if event.eventAuxiliary().event()==12788490 : import pdb; pdb.set_trace()
+          ## check whether Tau is isolated online
+          if onl_tau.tauID('byIsolation') < 0.5 and not self.keepAllTaus : self.failinIsoHLT   += 1
+          else                                                           : self.fillBasicHistos(self.basic_histos,onlTauColl+'_passIso',tau,onlPixVtx[0],off_vtx[0])
 
-
-
-#         if self.best_matching([tau],TauJetsIter0).values()[0] is not False : self.hasRegionJet += 1 
-#         if self.best_matching([tau],onlTracks0).values()[0]   is not False : self.hasRegionTrk += 1 
-#         if self.best_matching([tau],TauJetsIter0).values()[0] is not False or \
-#            self.best_matching([tau],onlTracks0).values()[0]   is not False : self.hasRegion +=1
+      #if skip : continue
         
-#         ## check whether Tau is reconstructed online
-#         if not onl_tau and not self.keepAllTaus :
-#           self.failinRecoHLT  += 1
-#         else :
-#           self.fillBasicHistos(self.basic_histos, onlTauColl+'_recoHLT' ,tau, onlPixVtx[0], off_vtx[0])
-#           ## check whether Tau has leading track online
-#           if onl_tau.tauID('decayModeFinding') < 0.5 and not self.keepAllTaus :
-#             self.fillBasicHistos(self.basic_histos, onlTauColl+'_failDM', tau, onlPixVtx[0], off_vtx[0]) 
-#             self.failinDMHLT  += 1
-#             TauJetsIter0       = self.doSomethingForFailingEvents( onlJetsForRegions, tau.onlTau, onlTracks0, onlJetsPreTrk )['caloJetsForTracking']
-#             FullTrackJetIter0  = [tr for tr in onlTracks0]
-#             for tr in TauJetsIter0 : FullTrackJetIter0.append(tr)
-#             if tau.onlineLeadingTrack is not False : 
-#               print '\n\nevent: ', event.eventAuxiliary().event(),'\n\t has some sort of track'  
-#               self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_PixVtx_failDM_hasOnlTrk', offVtx[0], onlPixVtx[0])
-#               self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_MuVtx_failDM_hasOnlTrk' , offVtx[0], onlMuVtx [0])
-#               self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_hasOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
-#               self.fillTrackHistos            (self.track_histos , onlTauColl+'_onlTrk_failDM_hasOnlTrk', tau.onlineLeadingTrack , offVtx[0], onlPixVtx[0], onlMuVtx[0])
-#             else :
-#               self.hasNoOnlineTrk += 1
-#               if self.best_matching([tau.onlTau],TauJetsIter0).values()[0] is not False : self.hasRegionJet += 1 
-#               if self.best_matching([tau.onlTau],onlTracks0).values()[0]   is not False : self.hasRegionTrk += 1 
-#               if self.best_matching([tau.onlTau],TauJetsIter0).values()[0] is not False or \
-#                  self.best_matching([tau.onlTau],onlTracks0).values()[0]   is not False : self.hasRegion +=1
-#               self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_PixVtx_failDM_noOnlTrk', offVtx[0], onlPixVtx[0])
-#               self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_MuVtx_failDM_noOnlTrk' , offVtx[0], onlMuVtx [0])
-#               self.fillTrackHistos            (self.track_histos , onlTauColl+'_offTrk_failDM_noOnlTrk', tau.offlineLeadingTrack, offVtx[0], onlPixVtx[0], onlMuVtx[0])
-#           else :
-#             #skip = True
-#             self.fillBasicHistos            (self.basic_histos  , onlTauColl+'_passDM'                 , tau, onlPixVtx[0], off_vtx[0]) 
-#             self.fillVertexAssociationHistos(self.vertex_histos , onlTauColl+'_PixVtx_passDM_hasOnlTrk', offVtx[0], onlPixVtx[0])
-#             self.fillVertexAssociationHistos(self.vertex_histos , onlTauColl+'_MuVtx_passDM_hasOnlTrk' , offVtx[0], onlMuVtx [0])
-#             self.fillSortingHistos          (self.sorting_histos, onlTauColl+'_2passDM'                , tau.genLeadingTrack, tau.onlineLeadingTrack)
-# 
-#           ## check whether Tau is isolated online
-#           if onl_tau.tauID('byIsolation') < 0.5 and not self.keepAllTaus : self.failinIsoHLT   += 1
-#           else                                                           : self.fillBasicHistos(self.basic_histos,onlTauColl+'_passIso',tau,onlPixVtx[0],off_vtx[0])
-# 
-#       #if skip : continue
-#         
-#       self.fillTree(self.tree)
+      self.fillTree(self.tree)
         
     self.writeTree(self.tree, self.treeFile)  
   
@@ -348,9 +218,9 @@ class PATreader() :
     self.handles[ 'onlTrkJets2'         ] = [ Handle('std::vector<reco::TrackJet>'   ),'hltTrackAndTauJetsIter2'           ]
     self.handles[ 'onlTrkJets3'         ] = [ Handle('std::vector<reco::TrackJet>'   ),'hltTrackAndTauJetsIter3'           ]
       
-    self.handles[ 'onlPixVtx'      ] = [ Handle('std::vector<reco::Vertex>'     ),'hltPixelVertices'                  ]
-    self.handles[ 'onlInterVtx'    ] = [ Handle('std::vector<reco::Vertex>'     ),'hltOnlineVerticesAfterIter0'       ]
-    self.handles[ 'onlMuVtx'       ] = [ Handle('std::vector<reco::Vertex>'     ),'hltIsoMuonVertex'                  ]
+    self.handles[ 'onlPixVtx'           ] = [ Handle('std::vector<reco::Vertex>'     ),'hltPixelVertices'                  ]
+    self.handles[ 'onlInterVtx'         ] = [ Handle('std::vector<reco::Vertex>'     ),'hltOnlineVerticesAfterIter0'       ]
+    self.handles[ 'onlMuVtx'            ] = [ Handle('std::vector<reco::Vertex>'     ),'hltIsoMuonVertex'                  ]
 
   def selectVtx(self, vtx, ndof=4, max_z=24., max_rho=2.) :
     return vtx.ndof>ndof and abs(vtx.z())<max_z and abs(vtx.position().rho())<max_rho

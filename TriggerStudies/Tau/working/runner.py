@@ -161,7 +161,7 @@ failingEvents_4PixVtx_no_track_at_all = set( failingEvents_4PixVtx) - set( faili
                                  
 # myAnalyzer.bookTree('vertexTree')                       
 # myAnalyzer.looper(maxEvents=-1, pickEvents=[], verbose=False)
-myAnalyzer.looper(maxEvents=-1, pickEvents=failingEvents_failReco_hasRealOnlineTrk_offVtx, verbose=False)
+myAnalyzer.looper(maxEvents=-1, pickEvents=[], verbose=False)
 # myAnalyzer.writeTree( myAnalyzer.tree, myAnalyzer.treeFile)
 myAnalyzer.printSummary()
 
@@ -174,7 +174,8 @@ myAnalyzer.printSummary()
 
 
 # outFile = ROOT.TFile.Open('out_4pixVtx_sandbox.root' ,'recreate')
-outFile = ROOT.TFile.Open('out_OffVtx_sandbox.root' ,'recreate')
+# outFile = ROOT.TFile.Open('out_OffVtx_sandbox.root' ,'recreate')
+outFile = ROOT.TFile.Open('out_300.root' ,'recreate')
 
 
 outFile.cd()
