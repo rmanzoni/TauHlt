@@ -47,7 +47,8 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
         m_maxVtx     = regionPSet.getParameter<int>   ("maxVertex");
       }
       else{
-	m_maxVtx = 999; // RM: should be put to 0 as default and changed in the config
+// 	m_maxVtx = 999; // RM: should be put to 0 as default and changed in the config
+	m_maxVtx = 0; // RM: should be put to 0 as default and changed in the config
       }
       if (regionPSet.exists("searchOpt")){
 	m_searchOpt  = regionPSet.getParameter<bool>("searchOpt");
@@ -90,14 +91,14 @@ class TauRegionalPixelSeedGenerator : public TrackingRegionProducer {
         double sum = 0. ;
         for (unsigned int iVtx =0; iVtx < vertices.size(); ++iVtx)  {    
           if ( iVtx>m_maxVtx ) break ;
-          for (reco::Vertex::trackRef_iterator i=vertices.at(iVtx).tracks_begin(); i!=vertices.at(iVtx).tracks_end(); ++i) {
-            double pt = (*i)->pt();
-            if (pt > 2.5) { // Don't count tracks below 2.5 GeV
-            if (pt > 10.0) pt = 10.0;
-            sum += pt*pt;
-            }
-          }  
-          if (sum < 99. and iVtx > 0) break ;
+//           for (reco::Vertex::trackRef_iterator i=vertices.at(iVtx).tracks_begin(); i!=vertices.at(iVtx).tracks_end(); ++i) {
+//             double pt = (*i)->pt();
+//             if (pt > 2.5) { // Don't count tracks below 2.5 GeV
+//             if (pt > 10.0) pt = 10.0;
+//             sum += pt*pt;
+//             }
+//           }  
+//           if (sum < 99. and iVtx > 0) break ;
           GlobalPoint myTmp(vertices.at(iVtx).position().x(),vertices.at(iVtx).position().y(), vertices.at(iVtx).position().z());
           myVertices.push_back(myTmp) ;
         }  
