@@ -45,7 +45,8 @@ for name in names :
   basic_histos[name].update({'offVtxSumPt2'  : ROOT.TH1F( name+'_offVtxSumPt2'  , '' , 200  ,    0,10000 )} )
   basic_histos[name].update({'pixVtxTrkMult' : ROOT.TH1F( name+'_pixVtxTrkMult' , '' , 200  ,    0,  200 )} )
   basic_histos[name].update({'offVtxTrkMult' : ROOT.TH1F( name+'_offVtxTrkMult' , '' , 200  ,    0,  200 )} )
-
+  basic_histos[name].update({'HLTPtRes'      : ROOT.TH1F( name+'_HLTPtRes'      , '' , 400  ,   -2,    2 )} )
+  basic_histos[name].update({'HLTPtPull'     : ROOT.TH1F( name+'_HLTPtPull'     , '' , 500  ,  -50,   50 )} )
 
 track_histos = {}
 names = []
@@ -175,7 +176,7 @@ myAnalyzer.printSummary()
 
 # outFile = ROOT.TFile.Open('out_4pixVtx_sandbox.root' ,'recreate')
 # outFile = ROOT.TFile.Open('out_OffVtx_sandbox.root' ,'recreate')
-outFile = ROOT.TFile.Open('out_300.root' ,'recreate')
+outFile = ROOT.TFile.Open('out_11feb.root' ,'recreate')
 
 
 outFile.cd()

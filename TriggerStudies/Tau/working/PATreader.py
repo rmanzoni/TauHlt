@@ -361,6 +361,10 @@ class PATreader() :
     except : pass
     try    : histos[name]['offVtxTrkMult'].Fill(offVtx.nTracks() ,1.  )
     except : pass
+    try    : histos[name]['HLTPtRes'     ].Fill(particle.onlTau.pt() / particle.pt() - 1.,1.  )
+    except : pass
+    try    : histos[name]['HLTPtPull'    ].Fill(particle.onlTau.pt() - particle.pt()     ,1.  )
+    except : pass
 
   def fillVertexAssociationHistos(self, histos, name, vtx1, vtx2) :
     try    : histos[name]['dxy(offlineVtx)'].Fill( math.sqrt( (vtx1.x()-vtx2.x())*(vtx1.x()-vtx2.x()) + 
