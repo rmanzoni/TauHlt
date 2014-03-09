@@ -15,7 +15,7 @@ ROOT.gStyle.SetOptStat(0)
 
 ####
 if len(argv) < 3:
-   print 'Usage:python jetEfficiencyPlot.py EfficiencyRootFile.root EfficiencyRootFile.root label[optional]'
+   print 'Usage:python jetEfficiencyPlot4.py EfficiencyRootFile.root EfficiencyRootFile.root label[optional]'
    exit()
 #####
 eff_infile = argv[1]
@@ -66,6 +66,63 @@ def make_l1g_efficiency(denom, num):
     eff.SetMarkerSize(1.5)
     eff.SetLineColor(ROOT.EColor.kBlack)
     return eff
+######## Rate #########
+def make_l1_rate(pt):
+    ''' Make a rate plot out of L1Extra Pts '''
+    numBins = pt.GetNbinsX()
+    rate = pt.Clone()
+    for i in range(numBins):
+        rate.SetBinContent(i+1, pt.Integral(i+1, numBins))
+    rate.SetLineColor(ROOT.EColor.kRed)
+    rate.SetMarkerStyle(25)
+    rate.SetMarkerColor(ROOT.EColor.kRed)
+    return rate
+
+def make_l1g_rate(pt):
+    ''' Return a rate plot out of L1Extra Pts '''
+    numBins = pt.GetNbinsX()
+    rate = pt.Clone()
+    for i in range(1,numBins+1):
+        rate.SetBinContent(i, pt.Integral(i, numBins))
+    rate.SetLineColor(ROOT.EColor.kBlue)
+    rate.SetMarkerStyle(22)
+    rate.SetMarkerColor(ROOT.EColor.kBlue)
+    return rate
+
+#### Big PLotters #####
+def plot_effvsrate(l1_ntuple, uct_ntuple,variable='recoMET',title='', xaxis=' (GeV)',
+                         uct_cut=None, oct_cut=None,
+                         legend_label='',
+                         uct_legend = 'UCT',
+                         l1_legend = 'Current',
+                         filename=None,
+                         binning = (40, 0, 400)
+                        ):
+    denom = make_plot(
+        oct_ntuple, variable,
+        "", # No selection
+        binning
+    )
+    num_l1g = make_plot(
+        uct_ntuple, variable,
+        uct_cut,
+        binning
+    )
+    num_l1 = make_plot(
+        oct_ntuple, variable,
+        oct_cut,
+        binning
+    )
+
+    frame = ROOT.TH1F("frame", "frame", *binning)
+    l1g = make_l1g_efficiency(denom, num_l1g)
+    l1 = make_l1_efficiency(denom, num_l1)
+
+
+
+
+
+
 
 def compare_efficiencies(oct_ntuple, uct_ntuple, variable='recoMET',
                          title='', xaxis=' (GeV)',
@@ -121,47 +178,7 @@ def compare_efficiencies(oct_ntuple, uct_ntuple, variable='recoMET',
 #End EFF
 
 
-######## File #########
-def make_plot(tree, variable, selection, binning, xaxis='', title='', calFactor=1):
-    ''' Plot a variable using draw and return the histogram '''
-    #draw_string = "MaxIf$(%s * %0.2f, %s)>>htemp(%s)" % (variable, calFactor, selection, ", ".join(str(x) for x in binning))
-    draw_string = "%s * %0.2f>>htemp(%s)" % (variable, calFactor, ", ".join(str(x) for x in binning))
-    print draw_string
-    print tree
-    #tree.Draw(draw_string, "", "goff")
-    tree.Draw(draw_string, selection, "goff")
-    output_histo = ROOT.gDirectory.Get("htemp").Clone()
-    output_histo.GetXaxis().SetTitle(xaxis)
-    output_histo.SetTitle(title)
-    return output_histo
 
-def make_l1_rate(pt):
-    ''' Make a rate plot out of L1Extra Pts '''
-    numBins = pt.GetNbinsX()
-    rate = pt.Clone()
-
-    for i in range(numBins):
-        rate.SetBinContent(i+1, pt.Integral(i+1, numBins))
-
-    rate.SetLineColor(ROOT.EColor.kRed)
-    rate.SetMarkerStyle(25)
-    rate.SetMarkerColor(ROOT.EColor.kRed)
-
-    return rate
-
-def make_l1g_rate(pt):
-    ''' Return a rate plot out of L1Extra Pts '''
-    numBins = pt.GetNbinsX()
-    rate = pt.Clone()
-
-    for i in range(1,numBins+1):
-        rate.SetBinContent(i, pt.Integral(i, numBins))
-
-    rate.SetLineColor(ROOT.EColor.kBlue)
-    rate.SetMarkerStyle(22)
-    rate.SetMarkerColor(ROOT.EColor.kBlue)
-
-    return rate
 
 def plotRates(l1Ntuple, l1gNtuple, binning,
               l1Variable='', l1gVariable='',
