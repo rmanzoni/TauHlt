@@ -33,7 +33,6 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
 #include "L1Trigger/RegionalCaloTrigger/interface/L1RCT.h"
-#include "L1Trigger/UCT2015/interface/jetcorrections.h"
 
 using namespace std;
 using namespace edm;
@@ -633,7 +632,7 @@ UCT2015Producer::correctJets(const list<UCTCandidate>& jets) {
 	// jet corrections only valid if PU density has been calculated
 	list<UCTCandidate> corrlist;
 	if (!puCorrect) return corrlist;
-
+/*
 	corrlist.clear();
 
 	for(list<UCTCandidate>::const_iterator jet = jets.begin(); jet != jets.end(); jet++) {
@@ -663,9 +662,9 @@ UCT2015Producer::correctJets(const list<UCTCandidate>& jets) {
 
 	corrlist.sort();
 	corrlist.reverse();
-
+*/
 	return corrlist;
-}
+}   // This is outdated now - check with MIT for HI
 
 // Given a region at iphi/ieta, find the highest region in the surrounding
 // regions.

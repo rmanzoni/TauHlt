@@ -1,4 +1,4 @@
-#include "L1Trigger/UCT2015/plugins/UCT2015GctCandsProducer.h"
+#include "L1Trigger/UCT2015/interface/UCT2015GctCandsProducer.h"
 
 // system includes
 #include <memory>

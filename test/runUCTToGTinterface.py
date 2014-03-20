@@ -27,9 +27,9 @@ process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.GlobalTag.globaltag = 'POSTLS161_V12::All'
 
 # Load emulation and RECO sequences
-process.load("L1Trigger.UCT2015Core.emulationMC_cfi") 
+process.load("L1Trigger.UCT2015.emulationMC_cfi") 
 process.load("Configuration.Geometry.GeometryIdeal_cff")
-process.load("L1Trigger.UCT2015Core.uctl1extraparticles_cfi")
+process.load("L1Trigger.UCT2015.uctl1extraparticles_cfi")
 
 process.p1 = cms.Path(
     process.emulationSequence *

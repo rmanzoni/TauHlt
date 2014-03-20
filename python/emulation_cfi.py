@@ -12,7 +12,6 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.RawToDigi_Data_cff import *
 from L1Trigger.UCT2015.Lut import *
-from L1Trigger.UCT2015.uct2015L1ExtraParticles_cfi import *
 from L1Trigger.UCT2015.regionSF_cfi import *
 
 
@@ -37,20 +36,6 @@ uctDigis = cms.EDProducer(
     getFedsFromOmds = cms.bool(False),
     queryDelayInLS = cms.uint32(10),
     queryIntervalInLS = cms.uint32(100)#,
-)
-
-
-UCT2015EClusterProducer = cms.EDProducer(
-    "UCT2015EClusterProducer",
-    debug = cms.bool(False),
-    puCorrect = cms.bool(True),
-    puETMax = cms.uint32(7),
-    eClusterSeed = cms.uint32(5),
-    # Transparency correction calibration
-    # calib_v4 = 2012 data.  Use calib_v1 (ideal) for MC.
-    ecalCalibration = cms.vdouble(eg_calib_v4),
-    ecalLSB = cms.double(0.5),
-    ecalDigis = cms.VInputTag(cms.InputTag("ecalDigis:EcalTriggerPrimitives"))
 )
 
 CorrectedDigis = cms.EDProducer(
@@ -86,27 +71,6 @@ UCT2015Producer = cms.EDProducer(
     regionLSB = RCTConfigProducers.jetMETLSB,
 )
 
-UCTStage1BProducer = cms.EDProducer(
-    "UCTStage1BProducer",
-    puCorrect = cms.bool(True),
-    egSeed = cms.uint32(5),
-    tauSeed = cms.uint32(5),
-    regionalHoECut = cms.double(0.05),
-    egRelativeRgnIsolationCut = cms.double(0.1),
-    egRelativeJetIsolationCut = cms.double(0.1),
-    egRelativeEMRgnIsolationCut = cms.double(0.1),
-    egRelativeEMJetIsolationCut = cms.double(0.1),
-    tauRelativeRgnIsolationCut = cms.double(0.1),
-    tauRelativeJetIsolationCut = cms.double(0.1),
-    tauRelativeEMRgnIsolationCut = cms.double(0.1),
-    tauRelativeEMJetIsolationCut = cms.double(0.1),
-    egLSB = cms.double(0.5),
-    tauLSB = cms.double(1.0),  # This has to correspond with the value from L1CaloEmThresholds
-    regionLSB = RCTConfigProducers.jetMETLSB
-)
-
-from L1Trigger.L1ExtraFromDigis.l1extraParticles_cfi import *
-
 uctDigiStep = cms.Sequence(
     # Only do the digitization of objects that we care about
     #RawToDigi
@@ -121,11 +85,6 @@ uctEmulatorStep = cms.Sequence(
     # Now make UCT and L1 objects
     * uctDigis
     * CorrectedDigis 
-    * UCT2015EClusterProducer
-    * UCT2015Producer
-    * UCTStage1BProducer
-    * l1extraParticles
-    * uct2015L1ExtraParticles
 )
 
 emulationSequence = cms.Sequence(uctDigiStep * uctEmulatorStep)
