@@ -85,6 +85,7 @@ uctEmulatorStep = cms.Sequence(
     # Now make UCT and L1 objects
     * uctDigis
     * CorrectedDigis 
+    * UCT2015Producer    
 )
 
 emulationSequence = cms.Sequence(uctDigiStep * uctEmulatorStep)
