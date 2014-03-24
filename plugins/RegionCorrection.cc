@@ -39,13 +39,26 @@ class RegionCorrection : public edm::EDProducer {
 	private:
 		virtual void produce(edm::Event&, const edm::EventSetup&);
 
+		//Note the physical definitions are here but not used in calculation
                 double egPhysicalEt(const L1CaloEmCand& cand) const {
                         return egLSB_*cand.rank();
                 }
 
+		//Note the physical definitions are here but not used in calculation
 		double regionPhysicalEt(const L1CaloRegion& cand) const {
 			return regionLSB_*cand.et();
 		}
+
+		//These are the definitions used in calculation below
+                double egEt(const L1CaloEmCand& cand) const {
+                        return cand.rank();
+                }
+
+		//These are the definitions used in calculation below
+		double regionEt(const L1CaloRegion& cand) const {
+			return cand.et();
+		}
+
 
 		// Helper methods
 
@@ -56,6 +69,7 @@ class RegionCorrection : public edm::EDProducer {
 		unsigned int puMult;
 		bool puMultCorrect;
 
+		//egLSB and regionLSB no longer used
                 double egLSB_;
 		double regionLSB_;
 
@@ -90,11 +104,11 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	//-------- does something with the notCorrectedRegions
 	puMult = 0;
-
+	//This calulates PUM0
 	for(L1CaloRegionCollection::const_iterator notCorrectedRegion =
 			notCorrectedRegions->begin();
 			notCorrectedRegion != notCorrectedRegions->end(); notCorrectedRegion++){
-		double regionET =  regionPhysicalEt(*notCorrectedRegion);
+		double regionET =  regionEt(*notCorrectedRegion);
 		// cout << "regionET: " << regionET <<endl; 
 		if (regionET > 0) {puMult++;}
 	}
@@ -104,15 +118,16 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	for(L1CaloRegionCollection::const_iterator notCorrectedRegion =
 			notCorrectedRegions->begin();
 			notCorrectedRegion != notCorrectedRegions->end(); notCorrectedRegion++){
-		double regionET =  regionPhysicalEt(*notCorrectedRegion);
+		double regionET =  regionEt(*notCorrectedRegion);
 		unsigned int regionEta = notCorrectedRegion->gctEta();
-		//the divide by regionLSB to get back to gct Digis
 
 
                 double energyECAL2x1=0;
                 // Find associated 2x1 ECAL energy (EG are calibrated, we should not scale them up, it affects the isolation routines)
+                // 2x1 regions have the MAX tower contained in the 4x4 region that its position points to.
+                // This is to not break isolation.
                 for(L1CaloEmCollection::const_iterator egtCand =EMCands->begin(); egtCand != EMCands->end(); egtCand++){
-                        double et = egPhysicalEt(*egtCand);
+                        double et = egEt(*egtCand);
                         if(egtCand->regionId().iphi() == notCorrectedRegion->gctPhi() &&  egtCand->regionId().ieta() == notCorrectedRegion->gctEta()) {
                                 energyECAL2x1=et;
                                 break;  // I do not really like "breaks"
@@ -120,20 +135,23 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
 
 
-		double alpha = m_regionSF[2*regionEta + 0];
-		double gamma = (m_regionSF[2*regionEta + 1])/9;
+		double alpha = m_regionSF[2*regionEta + 0]; //Region Scale factor (See regionSF_cfi.py)
+		double gamma = 2*((m_regionSF[2*regionEta + 1])/9); //Region Offset. It needs to be divided by nine from the jet derived value in the lookup table. (See regionSF_cfi.py) Multiplied by 2 because gamma is given in regionPhysicalET (=regionEt*regionLSB), and we want regionEt= physicalEt/LSB and LSB=.5.
 
-		int pumbin = (int) puMult/22;
 
-		double puSub = m_regionSubtraction[18*regionEta+pumbin];
+		int pumbin = (int) puMult/22; //396 Regions. Bins are 22 wide. Dividing by 22 gives which bin# of the 18 bins. 
 
-		double pum0pt =  (regionET - puSub-energyECAL2x1); 
+		double puSub = m_regionSubtraction[18*regionEta+pumbin]*2;
+	//The values in m_regionSubtraction are MULTIPLIED by RegionLSB=.5 (physicalRegionEt), so to get back unmultiplied regionSubtraction we want to multiply the number by 2 (aka divide by LSB).
+	
 
-		double corrpum0pt = pum0pt*alpha+gamma+energyECAL2x1;
+		double pum0pt =  (regionET - puSub-energyECAL2x1); //subtract ECAl energy 
 
-		if (corrpum0pt <0) {corrpum0pt=0;} 
+		double corrpum0pt = pum0pt*alpha+gamma+energyECAL2x1; //add back in ECAL energy, calibrate regions(not including the ECAL2x1).
 
-		double regionEtCorr = (corrpum0pt)/regionLSB_;	
+		if (corrpum0pt <0) {corrpum0pt=0;} //zero floor
+
+		double regionEtCorr = (corrpum0pt);	
 
 
 		if(regionEta<18 && regionEta>3) //if !hf
