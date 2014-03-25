@@ -256,7 +256,8 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
                         unsigned hwEta=(((rctEta % 7) & 0x7) | (iEta<11 ? 0x8 : 0));
                         unsigned hwPhi= iPhi& 0x1f;
                         const int16_t bx=0; 
-                        double pt=itr.getFloat("associatedRegionEt");
+                        //double pt=itr.getFloat("associatedRegionEt");
+                        double pt=itr.pt();
                         unsigned rank = jetScale->rank(pt);
                         bool isFor=false;
                         bool isTau=true;
