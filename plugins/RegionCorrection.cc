@@ -121,6 +121,11 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 		double regionET =  regionEt(*notCorrectedRegion);
 		unsigned int regionEta = notCorrectedRegion->gctEta();
 
+                double regionEtCorr=0;
+
+                // Only non-empty regions are corrected
+                if(regionET!=0) {
+
 
                 double energyECAL2x1=0;
                 // Find associated 2x1 ECAL energy (EG are calibrated, we should not scale them up, it affects the isolation routines)
@@ -143,15 +148,16 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 		double puSub = m_regionSubtraction[18*regionEta+pumbin]*2;
 	//The values in m_regionSubtraction are MULTIPLIED by RegionLSB=.5 (physicalRegionEt), so to get back unmultiplied regionSubtraction we want to multiply the number by 2 (aka divide by LSB).
-	
+
 
 		double pum0pt =  (regionET - puSub-energyECAL2x1); //subtract ECAl energy 
 
 		double corrpum0pt = pum0pt*alpha+gamma+energyECAL2x1; //add back in ECAL energy, calibrate regions(not including the ECAL2x1).
+                        //if(energyECAL2x1>20) std::cout<<energyECAL2x1<<"  "<<regionET<<"   "<<puSub<<"   -->"<<pum0pt<<"     "<<corrpum0pt<<"   "<<std::endl;
+		if (corrpum0pt <0 || pum0pt<0) {corrpum0pt=0;} //zero floor
 
-		if (corrpum0pt <0) {corrpum0pt=0;} //zero floor
-
-		double regionEtCorr = (corrpum0pt);	
+		regionEtCorr = (corrpum0pt);	
+                }
 
 
 		if(regionEta<18 && regionEta>3) //if !hf
