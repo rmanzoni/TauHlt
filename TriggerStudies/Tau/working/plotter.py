@@ -29,8 +29,8 @@ def doRatio( num, den ) :
   den1 = dc(den)
   ratio = dc(num1)
   ratio.Divide(num1,den1,1.,1.,'b')
-  ratio.SetMinimum(0.55)
-  ratio.SetMaximum(1.05)
+  ratio.SetMinimum(0.9 )
+  ratio.SetMaximum(1.02)
   return ratio  
 
 def plot( basehisto, basehistolegend, name, xaxis, yaxis, title='CMS Simulation, #sqrt{s} = 8 TeV', morehistos = {}, color = ROOT.kRed, drawoptions = 'E', log = False , setRangeX = []) :
@@ -47,7 +47,7 @@ def plot( basehisto, basehistolegend, name, xaxis, yaxis, title='CMS Simulation,
   ROOT.gPad.SetGridy(1)
   ROOT.gPad.SetLogy(log)
 
-  l1 = ROOT.TLegend(0.5,0.3,0.8,0.5)
+  l1 = ROOT.TLegend(0.5,0.2,0.8,0.35)
   l1.AddEntry(basehisto,basehistolegend)
   l1.SetFillColor(0)
 
@@ -82,7 +82,8 @@ def plot( basehisto, basehistolegend, name, xaxis, yaxis, title='CMS Simulation,
 # suffix = '_newTauIDs'
 # suffix = '_first4PixVtx_sorted4power_threshold25gev'
 # suffix = '_13feb'
-suffix = '_1pixVtx_11feb'
+suffix = '_1vtx_cut'
+# suffix = '_1pixVtx_11feb'
 
 # file = ROOT.TFile.Open('out_offlineVtx.root','read')
 # file = ROOT.TFile.Open('out_firstPixelVtx.root','read')
@@ -131,7 +132,7 @@ pix2Ratio3 = doRatio( onlTauPixPassingIso2, offTaus )
 # plot( muRatio1 , 'p_{T}>20 GeV', 'muefficiency' , 'gen #tau p_{T} [GeV]', 'efficiency', morehistos = {muRatio2 :[ROOT.kGreen+3,'pass DecayMode'],muRatio3 :[ROOT.kBlue,'pass Isoaltion']} )
 
 # plot( pixRatio1 , 'p_{T}>20 GeV', 'pixefficiency'  + suffix, 'gen #tau p_{T} [GeV]', 'efficiency', morehistos = {pixRatio2 :[ROOT.kGreen+3,'pass DecayMode']}, setRangeX = [0.,510.] )
-plot( pix2Ratio1, 'HLT #tau p_{T}>17 GeV', 'pix2efficiency' + suffix, 'offline #tau p_{T} [GeV]', 'efficiency', morehistos = {pix2Ratio2:[ROOT.kGreen+3,'pass DecayMode']}, setRangeX = [18.,59.] )
+plot( pix2Ratio1, 'HLT #tau p_{T}>17 GeV', 'pix2efficiency' + suffix, 'offline #tau p_{T} [GeV]', 'efficiency', morehistos = {pix2Ratio2:[ROOT.kGreen+3,'pass DecayMode']}, setRangeX = [10.,110.] )
 # plot( muRatio1  , 'p_{T}>20 GeV', 'muefficiency'   + suffix, 'gen #tau p_{T} [GeV]', 'efficiency', morehistos = {muRatio2  :[ROOT.kGreen+3,'pass DecayMode']}, setRangeX = [0.,510.] )
 # plot( position   , ''            , 'position'       + suffix, 'position of offline PV in online PixVtx collection', 'fraction', drawoptions = '', log = True, setRangeX = [0.,20.] )
 

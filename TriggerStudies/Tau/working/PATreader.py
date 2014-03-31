@@ -44,6 +44,10 @@ class PATreader() :
     
     self.bookTree('syncTree', treetitle = 'Events')
     
+    notrack = 0
+    notrack = 0
+    
+    
     for loopId, event in enumerate(self.events):
       
       if self.breakLoop : break
@@ -89,15 +93,21 @@ class PATreader() :
       if verbose :
         print '\nevent', event.eventAuxiliary().event()   
         print 'tau pt', tau.pt(), '\teta', tau.eta(), '\tphi', tau.phi(), '\tcharge', tau.charge(), '\trecoDM', tau.decayMode(), '\tgenDM', tau.genDM   
+        print 'tau decayModeFinding', tau.tauID('decayModeFinding'), '\tbyCombinedIsolationDeltaBetaCorrRaw3Hits', tau.tauID('byCombinedIsolationDeltaBetaCorrRaw3Hits') , '\tagainstMuonTight', tau.tauID('againstMuonTight'), '\tagainstElectronLoose', tau.tauID('againstElectronLoose') 
+        print 'tau genJet pt', tau.genJet().pt()       
   
       self.fillBasicHistos(self.basic_histos,'offTaus',tau, onlPixVtx[0], off_vtx[0])
       self.allEvents += 1
       
       self.fillEventBranches(self.tree, event)
       self.fillTauBranches  (self.tree, tau, 'offTaus') 
-
+      self.fillVtxBranches  (self.tree, off_vtx, onlPixVtx, onlMuVtx, tau)
+  
       #self.fillTree(self.tree, tau, event)
       #self.fillTree( self.tree, tau.vertex(), off_vtx)
+
+
+      
       
       #skip = False
       for onlTauColl in self.onlineTauCollections :
@@ -105,11 +115,59 @@ class PATreader() :
         onl_tau = self.best_matching([tau], HLTTaus , dR=0.5).values()[0]
              
         tau.onlTau              = onl_tau
-        #tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlPFcandidates if cand.charge()!=0], dR=0.1).values()[0]        
+        #tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlPFcandidates if cand.charge()!=0], dR=0.1).values()[0] ## same as tracks 1-1 correspondance        
         tau.onlineLeadingTrack  = self.best_matching([tau.offlineLeadingTrack], [cand for cand in onlTracks if cand.charge()!=0], dR=0.1).values()[0]        
         
         self.fillTauBranches  (self.tree, onl_tau, onlTauColl)
         
+#         if onl_tau is not False : continue
+#         
+#         print '\nevent', event.eventAuxiliary().event()  , 'fails jet matching', '\t has leading track online', tau.onlineLeadingTrack is not False, '\t\tofflineDM', tau.decayMode(),'\tgen DM',tau.genDM 
+#         if tau.onlineLeadingTrack is False :
+#           import pdb ; pdb.set_trace()
+#           self.fillBasicHistos(self.basic_histos , onlTauColl+'_failRecoHLT_noOnlTrack'        , tau                    , onlPixVtx[0], off_vtx[0]) 
+#           self.fillTrackHistos(self.track_histos , onlTauColl+'_failRecoHLT_noOnlTrack_offTrk' , tau.offlineLeadingTrack, offVtx[0]   , onlPixVtx[0], onlMuVtx[0])
+# 
+#           self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_noOnlTrack_onlVtx0', offVtx[0], onlPixVtx[0])
+#           if len(onlPixVtx) >=2 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_noOnlTrack_onlVtx1', offVtx[0], onlPixVtx[1])
+#           if len(onlPixVtx) >=3 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_noOnlTrack_onlVtx2', offVtx[0], onlPixVtx[2])
+#           if len(onlPixVtx) >=4 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_noOnlTrack_onlVtx3', offVtx[0], onlPixVtx[3])
+# 
+#         else :
+#           import pdb ; pdb.set_trace()
+#           self.fillBasicHistos(self.basic_histos , onlTauColl+'_failRecoHLT_hasOnlTrack'       , tau                    , onlPixVtx[0], off_vtx[0]) 
+#           self.fillTrackHistos(self.track_histos , onlTauColl+'_failRecoHLT_hasOnlTrack_offTrk', tau.offlineLeadingTrack, offVtx[0]   , onlPixVtx[0], onlMuVtx[0])
+# 
+#           self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_hasOnlTrack_onlVtx0', offVtx[0], onlPixVtx[0])
+#           if len(onlPixVtx) >=2 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_hasOnlTrack_onlVtx1', offVtx[0], onlPixVtx[1])
+#           if len(onlPixVtx) >=3 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_hasOnlTrack_onlVtx2', offVtx[0], onlPixVtx[2])
+#           if len(onlPixVtx) >=4 : self.fillVertexAssociationHistos(self.vertex_histos, onlTauColl+'_failRecoHLT_hasOnlTrack_onlVtx3', offVtx[0], onlPixVtx[3])
+#        
+#         continue   
+
+        #import pdb ; pdb.set_trace()
+        
+        print '\nevent', event.eventAuxiliary().event()
+        
+        try :
+          if tau.onlTau.leadPFChargedHadrCand().trackRef().isNull() is False : tau.onlineLeadingTrackReco = tau.onlTau.leadPFChargedHadrCand().trackRef()
+          else                                                               : tau.onlineLeadingTrackReco = False
+        except :
+          tau.onlineLeadingTrackReco = False
+                  
+        myTracks = { tau.genLeadingTrack           : 'gen leading track              ', 
+                     tau.offlineLeadingTrack       : 'off leading track              ', 
+                     tau.onlineLeadingTrack        : 'onl trk match to leading track ', 
+                     tau.onlineLeadingTrackReco    : 'onl leading track              '}        
+        
+        for track in myTracks.keys() :
+          if track is not False : print myTracks[track], '\tpt', track.pt(), '\teta', track.eta(), '\tphi', track.phi(), '\tvtx z', track.vertex().z()           
+          else                  : print myTracks[track], '\tmissing'
+         
+        print 'offline tau pt', tau.pt()
+        if tau.onlTau : print 'online  tau pt', tau.onlTau.pt()
+        else          : print 'online  tau pt missing'
+          
         ## check whether Tau is reconstructed online
         if not onl_tau and not self.keepAllTaus :
           self.failinRecoHLT  += 1
@@ -500,13 +558,29 @@ class PATreader() :
     treeFile = ROOT.TFile.Open('tree.root','recreate')
     treeFile.cd()
     
-    self.evt_run  = n.zeros(1, dtype=int)
-    self.evt_lumi = n.zeros(1, dtype=int)
-    self.evt_evt  = n.zeros(1, dtype=int)
+    self.evt_run  = n.zeros(1, dtype=int) ; self.evt_run  [0] = -99
+    self.evt_lumi = n.zeros(1, dtype=int) ; self.evt_lumi [0] = -99
+    self.evt_evt  = n.zeros(1, dtype=int) ; self.evt_evt  [0] = -99
 
     tree.Branch('run '  , self.evt_run , 'run/I'  )
     tree.Branch('lumi'  , self.evt_lumi, 'lumi/I' )
     tree.Branch('evt '  , self.evt_evt , 'evt/I'  )
+
+    self.offVtx_z     = n.zeros(1, dtype=float) ; self.offVtx_z     [0] = -99.
+    self.onlPixVtx0_z = n.zeros(1, dtype=float) ; self.onlPixVtx0_z [0] = -99.
+    self.onlPixVtx1_z = n.zeros(1, dtype=float) ; self.onlPixVtx1_z [0] = -99.
+    self.onlPixVtx2_z = n.zeros(1, dtype=float) ; self.onlPixVtx2_z [0] = -99.
+    self.onlPixVtx3_z = n.zeros(1, dtype=float) ; self.onlPixVtx3_z [0] = -99.
+    self.onlMuVtx_z   = n.zeros(1, dtype=float) ; self.onlMuVtx_z   [0] = -99.
+    self.genTauVtx_z  = n.zeros(1, dtype=float) ; self.genTauVtx_z  [0] = -99.
+
+    tree.Branch('offVtx_z    '  , self.offVtx_z      , 'offVtx_z/D'      )
+    tree.Branch('onlPixVtx0_z'  , self.onlPixVtx0_z  , 'onlPixVtx0_z/D'  )
+    tree.Branch('onlPixVtx1_z'  , self.onlPixVtx1_z  , 'onlPixVtx1_z/D'  )
+    tree.Branch('onlPixVtx2_z'  , self.onlPixVtx2_z  , 'onlPixVtx2_z/D'  )
+    tree.Branch('onlPixVtx3_z'  , self.onlPixVtx3_z  , 'onlPixVtx3_z/D'  )
+    tree.Branch('onlMuVtx_z  '  , self.onlMuVtx_z    , 'onlMuVtx_z/D'    )  
+    tree.Branch('genTauVtx_z '  , self.genTauVtx_z   , 'genTauVtx_z/D'   )  
 
     self.tauForTrees = {}
     for tauColl in self.handles.keys() :
@@ -515,29 +589,74 @@ class PATreader() :
       #tauColl = tauColl.replace('offTaus'       ,'')
       #tauColl = tauColl.replace('onlTausPixVtx2','')
       self.tauForTrees.update({tauColl:{}}) 
-      tau_pt   = n.zeros(1, dtype=float) ; tau_pt [0] = -99.
-      tau_eta  = n.zeros(1, dtype=float) ; tau_eta[0] = -99.
-      tau_phi  = n.zeros(1, dtype=float) ; tau_phi[0] = -99.
-      tau_q    = n.zeros(1, dtype=int  ) ; tau_q  [0] = -99
-      tau_dm   = n.zeros(1, dtype=int  ) ; tau_dm [0] = -99
-      tau_dmf  = n.zeros(1, dtype=int  ) ; tau_dmf[0] = -99
+      tau_pt              = n.zeros(1, dtype=float) ; tau_pt             [0] = -99.
+      tau_eta             = n.zeros(1, dtype=float) ; tau_eta            [0] = -99.
+      tau_phi             = n.zeros(1, dtype=float) ; tau_phi            [0] = -99.
+      tau_q               = n.zeros(1, dtype=int  ) ; tau_q              [0] = -99
+      tau_dm              = n.zeros(1, dtype=int  ) ; tau_dm             [0] = -99
+      tau_dmf             = n.zeros(1, dtype=int  ) ; tau_dmf            [0] = -99
+      tau_vtxz            = n.zeros(1, dtype=float) ; tau_vtxz           [0] = -99.
+      tau_lt_pt           = n.zeros(1, dtype=float) ; tau_lt_pt          [0] = -99.
+      tau_lt_eta          = n.zeros(1, dtype=float) ; tau_lt_eta         [0] = -99.
+      tau_lt_phi          = n.zeros(1, dtype=float) ; tau_lt_phi         [0] = -99.
+      tau_lt_q            = n.zeros(1, dtype=int  ) ; tau_lt_q           [0] = -99
+      tau_lt_vtxz         = n.zeros(1, dtype=float) ; tau_lt_vtxz        [0] = -99.
+      tau_lt_chi2         = n.zeros(1, dtype=float) ; tau_lt_chi2        [0] = -99.
+      tau_lt_ndof         = n.zeros(1, dtype=int  ) ; tau_lt_ndof        [0] = -99
+      tau_lt_algo         = n.zeros(1, dtype=int  ) ; tau_lt_algo        [0] = -99
+      tau_lt_pter         = n.zeros(1, dtype=float) ; tau_lt_pter        [0] = -99.
+      tau_lt_losthits     = n.zeros(1, dtype=int  ) ; tau_lt_losthits    [0] = -99
+      tau_lt_validhits    = n.zeros(1, dtype=int  ) ; tau_lt_validhits   [0] = -99
+      tau_lt_validpixhits = n.zeros(1, dtype=int  ) ; tau_lt_validpixhits[0] = -99
+      tau_lt_validtrkhits = n.zeros(1, dtype=int  ) ; tau_lt_validtrkhits[0] = -99
+      tau_lt_pixlayers    = n.zeros(1, dtype=int  ) ; tau_lt_pixlayers   [0] = -99
       variables = {
-                   'pt'  : tau_pt  ,
-                   'eta' : tau_eta ,
-                   'phi' : tau_phi ,
-                   'q'   : tau_q   ,
-                   'dm'  : tau_dm  ,
-                   'dmf' : tau_dmf ,
+                   'pt'             : tau_pt             ,
+                   'eta'            : tau_eta            ,
+                   'phi'            : tau_phi            ,
+                   'q'              : tau_q              ,
+                   'dm'             : tau_dm             ,
+                   'dmf'            : tau_dmf            ,
+                   'vtxz'           : tau_vtxz           ,
+                   'lt_pt'          : tau_lt_pt          ,
+                   'lt_eta'         : tau_lt_eta         ,
+                   'lt_phi'         : tau_lt_phi         ,
+                   'lt_q'           : tau_lt_q           ,
+                   'lt_vtxz'        : tau_lt_vtxz        ,
+                   'lt_chi2'        : tau_lt_chi2        ,
+                   'lt_ndof'        : tau_lt_ndof        ,
+                   'lt_algo'        : tau_lt_algo        ,
+                   'lt_pter'        : tau_lt_pter        ,
+                   'lt_losthits'    : tau_lt_losthits    ,
+                   'lt_validhits'   : tau_lt_validhits   ,
+                   'lt_validpixhits': tau_lt_validpixhits,
+                   'lt_validtrkhits': tau_lt_validtrkhits,
+                   'lt_pixlayers'   : tau_lt_pixlayers   ,
                    }
       self.tauForTrees[tauColl] = variables
       
     for tauColl in self.tauForTrees.keys() :
-      tree.Branch(tauColl+'_pt' , self.tauForTrees[tauColl]['pt' ], tauColl+'_pt/D'  )
-      tree.Branch(tauColl+'_eta', self.tauForTrees[tauColl]['eta'], tauColl+'_eta/D' )
-      tree.Branch(tauColl+'_phi', self.tauForTrees[tauColl]['phi'], tauColl+'_phi/D' )
-      tree.Branch(tauColl+'_q'  , self.tauForTrees[tauColl]['q'  ], tauColl+'_q/I'   )
-      tree.Branch(tauColl+'_dm' , self.tauForTrees[tauColl]['dm' ], tauColl+'_dm/I'  )
-      tree.Branch(tauColl+'_dmf', self.tauForTrees[tauColl]['dmf'], tauColl+'_dmf/I' )
+      tree.Branch(tauColl+'_pt'             , self.tauForTrees[tauColl]['pt'             ], tauColl+'_pt/D'              )
+      tree.Branch(tauColl+'_eta'            , self.tauForTrees[tauColl]['eta'            ], tauColl+'_eta/D'             )
+      tree.Branch(tauColl+'_phi'            , self.tauForTrees[tauColl]['phi'            ], tauColl+'_phi/D'             )
+      tree.Branch(tauColl+'_q'              , self.tauForTrees[tauColl]['q'              ], tauColl+'_q/I'               )
+      tree.Branch(tauColl+'_dm'             , self.tauForTrees[tauColl]['dm'             ], tauColl+'_dm/I'              )
+      tree.Branch(tauColl+'_dmf'            , self.tauForTrees[tauColl]['dmf'            ], tauColl+'_dmf/I'             )
+      tree.Branch(tauColl+'_vtxz'           , self.tauForTrees[tauColl]['vtxz'           ], tauColl+'_vtxz/D'            )
+      tree.Branch(tauColl+'_lt_pt'          , self.tauForTrees[tauColl]['lt_pt'          ], tauColl+'_lt_pt/D'           )
+      tree.Branch(tauColl+'_lt_eta'         , self.tauForTrees[tauColl]['lt_eta'         ], tauColl+'_lt_eta/D'          )
+      tree.Branch(tauColl+'_lt_phi'         , self.tauForTrees[tauColl]['lt_phi'         ], tauColl+'_lt_phi/D'          )
+      tree.Branch(tauColl+'_lt_q'           , self.tauForTrees[tauColl]['lt_q'           ], tauColl+'_lt_q/I'            )
+      tree.Branch(tauColl+'_lt_vtxz'        , self.tauForTrees[tauColl]['lt_vtxz'        ], tauColl+'_lt_vtxz/D'         )
+      tree.Branch(tauColl+'_lt_chi2'        , self.tauForTrees[tauColl]['lt_chi2'        ], tauColl+'_lt_chi2/D'         )
+      tree.Branch(tauColl+'_lt_ndof'        , self.tauForTrees[tauColl]['lt_ndof'        ], tauColl+'_lt_ndof/I'         )
+      tree.Branch(tauColl+'_lt_algo'        , self.tauForTrees[tauColl]['lt_algo'        ], tauColl+'_lt_algo/I'         )
+      tree.Branch(tauColl+'_lt_pter'        , self.tauForTrees[tauColl]['lt_pter'        ], tauColl+'_lt_pter/D'         )
+      tree.Branch(tauColl+'_lt_losthits'    , self.tauForTrees[tauColl]['lt_losthits'    ], tauColl+'_lt_losthits/I'     )
+      tree.Branch(tauColl+'_lt_validhits'   , self.tauForTrees[tauColl]['lt_validhits'   ], tauColl+'_lt_validhits/I'    )
+      tree.Branch(tauColl+'_lt_validpixhits', self.tauForTrees[tauColl]['lt_validpixhits'], tauColl+'_lt_validpixhits/I' )
+      tree.Branch(tauColl+'_lt_validtrkhits', self.tauForTrees[tauColl]['lt_validtrkhits'], tauColl+'_lt_validtrkhits/I' )
+      tree.Branch(tauColl+'_lt_pixlayers'   , self.tauForTrees[tauColl]['lt_pixlayers'   ], tauColl+'_lt_pixlayers/I'    )
         
     self.tree     = tree
     self.treeFile = treeFile
@@ -550,20 +669,42 @@ class PATreader() :
   def fillTauBranches(self, tree, tau, tauColl) :
     #import pdb ; pdb.set_trace()
     if tau is not False :
-      self.tauForTrees[tauColl]['pt' ][0] = tau.pt()
-      self.tauForTrees[tauColl]['eta'][0] = tau.eta()
-      self.tauForTrees[tauColl]['phi'][0] = tau.phi()
-      self.tauForTrees[tauColl]['q'  ][0] = tau.charge()
-      self.tauForTrees[tauColl]['dm' ][0] = tau.decayMode()
-      self.tauForTrees[tauColl]['dmf'][0] = tau.tauID('decayModeFinding')
-    else :
-      self.tauForTrees[tauColl]['pt' ][0] = -99.
-      self.tauForTrees[tauColl]['eta'][0] = -99.
-      self.tauForTrees[tauColl]['phi'][0] = -99.
-      self.tauForTrees[tauColl]['q'  ][0] = -99
-      self.tauForTrees[tauColl]['dm' ][0] = -99
-      self.tauForTrees[tauColl]['dmf'][0] = -99
+      self.tauForTrees[tauColl]['pt'     ][0] = tau.pt()
+      self.tauForTrees[tauColl]['eta'    ][0] = tau.eta()
+      self.tauForTrees[tauColl]['phi'    ][0] = tau.phi()
+      self.tauForTrees[tauColl]['q'      ][0] = tau.charge()
+      self.tauForTrees[tauColl]['dm'     ][0] = tau.decayMode()
+      self.tauForTrees[tauColl]['dmf'    ][0] = tau.tauID('decayModeFinding')
+      self.tauForTrees[tauColl]['vtxz'   ][0] = tau.vertex().z()
+      try :
+        leadingTrack = self.checkLeadingTrack(tau)
+        self.tauForTrees[tauColl]['lt_pt'          ][0] = leadingTrack.pt()
+        self.tauForTrees[tauColl]['lt_eta'         ][0] = leadingTrack.eta()
+        self.tauForTrees[tauColl]['lt_phi'         ][0] = leadingTrack.phi()
+        self.tauForTrees[tauColl]['lt_q'           ][0] = leadingTrack.charge()
+        self.tauForTrees[tauColl]['lt_vtxz'        ][0] = leadingTrack.vertex().z()
+        self.tauForTrees[tauColl]['lt_chi2'        ][0] = leadingTrack.chi2()
+        self.tauForTrees[tauColl]['lt_ndof'        ][0] = leadingTrack.ndof()
+        self.tauForTrees[tauColl]['lt_algo'        ][0] = leadingTrack.algo()
+        self.tauForTrees[tauColl]['lt_pter'        ][0] = leadingTrack.ptError()
+        self.tauForTrees[tauColl]['lt_losthits'    ][0] = leadingTrack.numberOfLostHits() 
+        self.tauForTrees[tauColl]['lt_validhits'   ][0] = leadingTrack.numberOfValidHits()
+        self.tauForTrees[tauColl]['lt_validpixhits'][0] = leadingTrack.hitPattern().numberOfValidPixelHits() 
+        self.tauForTrees[tauColl]['lt_validtrkhits'][0] = leadingTrack.hitPattern().numberOfValidTrackerHits()
+        self.tauForTrees[tauColl]['lt_pixlayers'   ][0] = leadingTrack.hitPattern().pixelLayersWithMeasurement()
+      except :
+        pass
 
+  def fillVtxBranches(self, tree, offvtx, pixvtx, muvtx, tau) :
+    #import pdb ; pdb.set_trace()
+    self.offVtx_z[0]     = offvtx[0].z()
+    self.onlPixVtx0_z[0] = pixvtx[0].z()
+    self.onlMuVtx_z[0]   = muvtx [0].z()
+    self.genTauVtx_z[0]  = tau.genLeadingTrack.vertex().z()
+    if len(pixvtx)>1 : self.onlPixVtx1_z[0] = pixvtx[1].z()
+    if len(pixvtx)>2 : self.onlPixVtx2_z[0] = pixvtx[0].z()
+    if len(pixvtx)>3 : self.onlPixVtx3_z[0] = pixvtx[3].z()
+    
   def fillTree(self, tree) :
     #import pdb ; pdb.set_trace()
     tree.Fill()
