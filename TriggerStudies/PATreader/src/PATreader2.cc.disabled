@@ -1,0 +1,313 @@
+// -*- C++ -*-
+//
+// Package:    PATreader2
+// Class:      PATreader2
+// 
+/**\class PATreader2 PATreader2.cc TriggerStudies/PATreader2/src/PATreader2.cc
+
+ Description: [one line class summary]
+
+ Implementation:
+     [Notes on implementation]
+*/
+//
+// Original Author:  Riccardo Manzoni,42 2-023,+41227662348,
+//         Created:  Wed Feb 12 20:46:16 CET 2014
+// $Id$
+//
+//
+
+
+// system include files
+#include <memory>
+#include <vector>
+#include <TMath.h>
+// #include <TH1.h>
+#include <TH1F.h>
+#include <TH2F.h>
+
+// user include files
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
+
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+
+//#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
+
+//
+// class declaration
+//
+
+class PATreader2 : public edm::EDAnalyzer {
+   public:
+      explicit PATreader2(const edm::ParameterSet&);
+      ~PATreader2();
+
+      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+
+
+   private:
+      virtual void beginJob() ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&);
+      virtual void endJob() ;
+
+      virtual void beginRun(edm::Run const&, edm::EventSetup const&);
+      virtual void endRun(edm::Run const&, edm::EventSetup const&);
+      virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+      virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+      
+      // ----------member data ---------------------------
+      double lowerThreshold_ ;
+      double upperThreshold_ ;
+      double maxZDistance_   ;
+      double power_          ;
+      int    enhanceWeight_  ;
+      bool   verbose_        ;
+      
+      edm::Service<TFileService>  outfile_ ;
+      std::map<std::string, TH1*> hists_   ;
+      std::map<std::string, TH2*> hists2D_ ;
+};
+
+//
+// constants, enums and typedefs
+//
+
+//
+// static data member definitions
+//
+
+//
+// constructors and destructor
+//
+PATreader2::PATreader2(const edm::ParameterSet& iConfig) : 
+  lowerThreshold_ (iConfig.getParameter<double>("lowerPtThreshold")),
+  upperThreshold_ (iConfig.getParameter<double>("upperPtThreshold")),
+  maxZDistance_   (iConfig.getParameter<double>("maxZDistance"    )),
+  power_          (iConfig.getParameter<double>("power"           )),
+  enhanceWeight_  (iConfig.getParameter<int>   ("enhanceWeight"   )),
+  verbose_        (iConfig.getParameter<bool>  ("verbose"         ))
+{
+   //now do what ever initialization is needed
+
+}
+
+
+PATreader2::~PATreader2()
+{
+ 
+   // do anything here that needs to be done at desctruction time
+   // (e.g. close files, deallocate resources etc.)
+
+}
+
+
+//
+// member functions
+//
+
+// ------------ method called for each event  ------------
+void
+PATreader2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+{
+  using namespace edm;
+
+  Handle<std::vector<reco::Vertex>>            offVtx  ;
+  iEvent.getByLabel("selectedPrimaryVertices", offVtx) ;
+
+  Handle<std::vector<reco::Vertex>>            onlPixVtx  ;
+  iEvent.getByLabel("hltPixelVertices"       , onlPixVtx) ;
+
+  Handle<std::vector<reco::Track>>             hltPixTrk  ;
+  iEvent.getByLabel("hltPixelTracks"         , hltPixTrk) ;
+
+  reco::Vertex offPV = offVtx->front() ;
+
+  unsigned int onlPixVtxIndex = 0             ;
+  unsigned int i              = 0             ; 
+  unsigned int myPosition     = 0             ; 
+  double       myDistance     = maxZDistance_ ;
+  double       maxsum         = 0.            ;
+  double       leadTrkPt      = 0.            ;
+  double       power          = 1.            ;
+  double       CL             = -99.          ;
+  double       weight         = 1.            ;
+  int          nTracks        = 0             ;
+  
+  
+  if (verbose_) std::cout << "vertex size\t" << onlPixVtx->size() << std::endl ;
+  for ( reco::VertexCollection::const_iterator vtx = onlPixVtx->begin() ; vtx != onlPixVtx->end() ; ++vtx , ++i ){
+    
+    reco::Vertex vert = *vtx ;
+
+    if ( fabs( offPV.z() - vtx.z() ) < myDistance ) {
+      myDistance = fabs( offPV.z() - vtx.z() ) ;
+      myPosition = i ; 
+    }
+
+    double sum = 0. ;
+    
+    // sort vertex track by pt
+    std::vector< reco::Track > sortedVertexTracks ;
+    for ( reco::Vertex::trackRef_iterator trk = vert.tracks_begin(); trk != vert.tracks_end(); ++trk ) {
+      reco::TrackRef trk_now(hltPixTrk, (*trk).key()) ;
+      sortedVertexTracks.push_back(*trk_now) ;
+    }  
+    sort( sortedVertexTracks.begin(), sortedVertexTracks.end(), []( reco::Track a, reco::Track b ){ return a.pt() > b.pt(); } ) ;
+    if (verbose_) std::cout << "\ttracks size \t" << sortedVertexTracks.size() << std::endl ;
+    
+    int j = 0  ;  
+    //if (sortedVertexTracks.size() > 0 ) { 
+    //  if (sortedVertexTracks.front().pt() < 10.) continue ; 
+    //}
+    //if (sortedVertexTracks.size() == 0 ) std::cout << "\t Pathological event! Pixel Vertex built out of 0 tracks"
+    for ( reco::TrackCollection::const_iterator myIter = sortedVertexTracks.begin() ; myIter != sortedVertexTracks.end() ; ++myIter, ++j ) {
+      double pt = myIter->pt() ;
+      if (verbose_) std::cout << "\t\t track#\t" << j << "\t pt\t" << pt << std::endl ; 
+      if (pt < lowerThreshold_                        ) continue             ; 
+      if (pt > upperThreshold_ && upperThreshold_ > 0.) pt = upperThreshold_ ;
+      if ( j <= enhanceWeight_                        ) power = power_ + 1   ;
+      else                                              power = power_       ;
+      sum += TMath::Power(pt, power) ; 
+    }    
+
+    weight = 1. ;
+    //if      (sum < 1000. && sortedVertexTracks.size() < 5    ) weight = 0.7  ;
+    //if      (sum < 1000. && sortedVertexTracks.size() < 10   ) weight = 0.9  ;
+    //else if (sum < 2000. && sortedVertexTracks.size() < 5    ) weight = 0.7  ;
+    //else if (sum < 2000. && sortedVertexTracks.size() < 10   ) weight = 0.9  ;
+    //else if (               sortedVertexTracks.size() < 12.5 ) weight = 0.9  ;
+
+    if ( sum > maxsum ){
+      //CL             = ChiSquaredProbability((double)vert.normalizedChi2(),(double)1.) ;
+      CL             = TMath::Prob(vert.normalizedChi2(),1) ;
+      //if (verbose_) std::cout << vert.normalizedChi2() << "\t" << TMath::Prob(vert.normalizedChi2(),1) << std::endl ;
+      maxsum         = sum *weight                     ;
+      onlPixVtxIndex = i                               ;
+      nTracks        = sortedVertexTracks.size()       ;
+      leadTrkPt      = sortedVertexTracks.front().pt() ;
+    } 
+  }
+
+  if (maxsum < 5 ) {
+    std::cout << "\t Pathological event! sum pt is too low\t" << maxsum << std::endl ;
+    std::cout << "\t nTracks  \t" << nTracks   << std::endl ;
+    std::cout << "\t leadTrkPt\t" << leadTrkPt << std::endl ;
+    std::cout << "\t onlPixVtxIndex\t" << onlPixVtxIndex << std::endl ;
+  }
+  
+  //if (maxsum < 1000.) return ;
+  
+  reco::Vertex onlPV ;
+  
+  if   ( onlPixVtxIndex <= onlPixVtx->size() ) onlPV = onlPixVtx->at(onlPixVtxIndex) ;
+  else {
+    //std::cout << "fuck\t" << iEvent.id().event() << std::endl ;
+    return ;
+  }
+  
+  if (verbose_) std::cout << "myPosition " << myPosition << std::endl ;
+  hists_["position"] -> Fill(myPosition) ;
+  
+  if ( fabs( onlPV.z() - offPV.z() ) < maxZDistance_ ) {
+    if (verbose_) std::cout << "matched" << std::endl ;
+    hists_  ["matched"  ] -> Fill(1)         ;
+    hists2D_["matched2D"] -> Fill(nTracks,1) ;
+
+    hists_  ["matched_maxsumpt"   ] -> Fill(maxsum)    ;
+    hists_  ["matched_ntracks"    ] -> Fill(nTracks)   ;
+    hists_  ["matched_CL"         ] -> Fill(CL)        ;
+    hists_  ["matched_leadTrackpt"] -> Fill(leadTrkPt) ;
+    hists2D_["matched_sumPt2_vs_nTrakcs"] -> Fill(maxsum,nTracks) ;
+  }
+  else {
+    if (verbose_) std::cout << "failed"  << std::endl ;
+    hists_  ["matched"  ] -> Fill(0)         ;
+    hists2D_["matched2D"] -> Fill(nTracks,0) ;
+
+    hists_  ["failed_maxsumpt"    ] -> Fill(maxsum)    ;
+    hists_  ["failed_ntracks"     ] -> Fill(nTracks)   ;
+    hists_  ["failed_CL"          ] -> Fill(CL)        ;
+    hists_  ["failed_leadTrackpt" ] -> Fill(leadTrkPt) ;
+    hists2D_["failed_sumPt2_vs_nTrakcs"] -> Fill(maxsum,nTracks) ;
+  }
+  
+}
+
+// ------------ method called once each job just before starting event loop  ------------
+void 
+PATreader2::beginJob()
+{
+  TH1::SetDefaultSumw2() ;
+  TH2::SetDefaultSumw2() ;
+
+  hists_  ["position"           ] = outfile_ -> make<TH1F>("position"           , "position"           ,  50  , 0., 50.     ) ;
+
+  hists_  ["matched_maxsumpt"   ] = outfile_ -> make<TH1F>("matched_maxsumpt"   , "matched_maxsumpt"   , 100  , 0., 2000.  ) ;
+  hists_  ["matched_ntracks"    ] = outfile_ -> make<TH1F>("matched_ntracks"    , "matched_ntracks"    , 30   , 0 , 30      ) ;
+  hists_  ["matched_CL"         ] = outfile_ -> make<TH1F>("matched_CL"         , "matched_CL"         , 10000, 0., 1.      ) ;
+  hists_  ["matched_leadTrackpt"] = outfile_ -> make<TH1F>("matched_leadTrackpt", "matched_leadTrackpt", 100  , 0., 500.    ) ;
+ 
+  hists_  ["failed_maxsumpt"    ] = outfile_ -> make<TH1F>("failed_maxsumpt"    , "failed_maxsumpt"    , 100  , 0., 2000.  ) ;
+  hists_  ["failed_ntracks"     ] = outfile_ -> make<TH1F>("failed_ntracks"     , "failed_ntracks"     , 30   , 0 , 30      ) ;
+  hists_  ["failed_CL"          ] = outfile_ -> make<TH1F>("failed_CL"          , "failed_CL"          , 10000, 0., 1.      ) ;
+  hists_  ["failed_leadTrackpt" ] = outfile_ -> make<TH1F>("failed_leadTrackpt" , "failed_leadTrackpt" , 100  , 0., 500.    ) ;
+
+  hists_  ["matched"            ] = outfile_ -> make<TH1F>("matched"            , "matched"            , 2    , 0., 2.      ) ;
+  
+  hists2D_["matched2D"          ] = outfile_ -> make<TH2F>("matched2D"          , "matched2D"          , 20, 0 ,20 , 2, 0., 2.) ;
+  hists2D_["matched_sumPt2_vs_nTrakcs"  ] = outfile_ -> make<TH2F>("matched_sumPt2_vs_nTrakcs"  , "matched_sumPt2_vs_nTrakcs"  , 100  , 0., 2000., 30   , 0 , 30) ;
+  hists2D_["failed_sumPt2_vs_nTrakcs"   ] = outfile_ -> make<TH2F>("failed_sumPt2_vs_nTrakcs"   , "failed_sumPt2_vs_nTrakcs"   , 100  , 0., 2000., 30   , 0 , 30) ;
+}
+
+// ------------ method called once each job just after ending the event loop  ------------
+void 
+PATreader2::endJob() 
+{
+}
+
+// ------------ method called when starting to processes a run  ------------
+void 
+PATreader2::beginRun(edm::Run const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when ending the processing of a run  ------------
+void 
+PATreader2::endRun(edm::Run const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when starting to processes a luminosity block  ------------
+void 
+PATreader2::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when ending the processing of a luminosity block  ------------
+void 
+PATreader2::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
+void
+PATreader2::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  //The following says we do not know what parameters are allowed so do no validation
+  // Please change this to state exactly what you do use, even if it is no parameters
+  edm::ParameterSetDescription desc;
+  desc.setUnknown();
+  descriptions.addDefault(desc);
+}
+
+//define this as a plug-in
+DEFINE_FWK_MODULE(PATreader2);
