@@ -1647,8 +1647,8 @@ hltPatTausGeneric = cms.EDProducer(
 process.selectedHltPatTaus = cms.EDFilter(
     "PATTauSelector",
     src = cms.InputTag("hltPatTaus"),
-    cut = cms.string("pt>17"),
-    #cut = cms.string("pt>0"),
+    #cut = cms.string("pt>17"),
+    cut = cms.string("pt>0"),
     filter = cms.bool(False)
     )
 ###

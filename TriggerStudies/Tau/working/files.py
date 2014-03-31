@@ -1,256 +1,4 @@
 myFiles = [ 
-
-
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_10_1_psB.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_11_1_jiu.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_12_1_k1x.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_13_1_q1S.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_14_1_XAV.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_15_1_tVR.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_16_1_KZO.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_17_2_o1E.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_18_1_fc8.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_19_1_a2i.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_1_1_vNS.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_20_1_jKc.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_2_1_MmU.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_3_2_A6t.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_4_1_rlF.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_5_1_Q9U.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_6_1_TsP.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_7_1_Lfv.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_8_1_Mr1.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_9_1_NyP.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_10_1_Tfh.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_11_1_wUu.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_12_1_hMB.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_13_1_0kq.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_14_1_2rk.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_15_1_hEx.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_16_1_HFS.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_17_1_mTz.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_18_1_089.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_1_1_x8r.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_2_1_wVG.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_3_1_yjy.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_4_1_lre.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_5_1_xqG.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_6_1_ztQ.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_7_1_fPe.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_8_1_Eom.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/noPtCutHLT/ZPrimeTauTau_first4PixelVtx_sorted2power_threshold10gev/patTuple_9_1_eTD.root',
-
-
-
-
-
-
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_10_1_0Gd.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_11_1_l2L.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_12_1_0Wu.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_13_1_Bc5.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_14_1_gcY.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_15_1_Vii.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_16_1_gM9.root',
-# # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_17_2_4c9.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_18_1_riJ.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_19_1_yl7.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_1_1_YbI.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_20_1_Psy.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_2_1_Pqn.root',
-# # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_3_1_CK9.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_4_1_csm.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_5_1_wAo.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_6_1_j69.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_7_1_iNv.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_8_1_y04.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g100_sorted2power_threshold10gev/patTuple_9_1_BHD.root',
-
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_10_1_I9Z.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_11_1_XDG.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_12_1_5m0.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_13_1_Qyn.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_14_1_F2m.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_15_1_aCD.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_16_1_P0k.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_18_1_N7J.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_19_1_vcK.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_1_1_OTz.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_20_1_7Ny.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_2_1_XhF.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_4_1_WhM.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_5_1_G3q.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_6_1_1ty.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_7_1_7fo.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_8_1_8D4.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g200_sorted2power_threshold10gev/patTuple_9_1_twz.root',
-
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_10_1_LiD.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_11_1_29b.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_12_1_iYk.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_13_1_PZ2.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_14_1_3VN.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_15_1_Fas.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_16_1_xmm.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_18_1_d69.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_19_1_gpz.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_1_1_8kp.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_20_1_ZhB.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_2_1_OU4.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_4_1_ySL.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_5_1_ATW.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_6_1_ZU3.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_7_1_HfW.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_8_1_Njv.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/mt/4mar/ZTauTau_AllPixVtx_pt2_g300_sorted2power_threshold10gev/patTuple_9_1_Djp.root',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_10_1_0so.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_11_1_LTK.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_12_1_3On.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_13_1_ukM.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_14_1_jys.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_15_1_0Eu.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_16_1_y0s.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_17_1_kAz.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_18_1_Tz4.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_19_1_lBD.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_1_1_oYa.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_20_1_n1z.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_2_1_6rK.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_3_1_GRd.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_4_1_4Cz.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_5_1_wIm.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_6_1_yJb.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_7_1_6N2.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_8_1_4ST.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_9_1_poA.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_10_1_9dL.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_11_1_lbb.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_12_1_MkA.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_13_1_qnH.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_14_1_5YF.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_15_1_4LE.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_16_1_Hgb.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_17_1_xBk.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_18_1_V1s.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_1_1_Nnq.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_2_1_mJl.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_3_1_myi.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_4_1_r0B.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_5_1_02q.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_6_1_Pqy.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_7_1_Tia.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_8_1_Z92.root',
-'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/13feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_9_1_LoY.root',
-
-
-
-
-
-
-
-
-
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_10_1_GvD.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_11_1_S5p.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_12_1_N2l.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_13_1_Hg0.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_14_1_SsR.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_15_1_YEP.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_16_1_now.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_17_1_Bbs.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_18_1_0QX.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_19_1_o8t.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_1_1_qTm.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_20_1_zZt.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_2_1_flx.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_3_1_d2U.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_4_1_EY5.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_5_1_AYg.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_6_1_5OP.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_7_1_dhn.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_8_1_15u.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_9_1_2tv.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_10_1_W49.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_11_1_ezM.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_12_1_yGp.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_13_1_yRY.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_14_1_D1Q.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_15_1_4qS.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_16_1_JyY.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_17_1_jMl.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_18_1_wVw.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_1_1_vfi.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_2_1_rF9.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_3_1_gQM.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_4_1_4Db.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_5_1_z6F.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_6_1_7jI.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_7_1_4f2.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_8_1_jyE.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_firstPixelVtx_sorted2power_threshold10gev/patTuple_9_1_sxl.root',
-
-
-
-
-
-
-
-
-
-
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx_sorted4power_threshold25gev/patTuple_10_1_sFh.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx_sorted4power_threshold25gev/patTuple_11_1_ebQ.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx_sorted4power_threshold25gev/patTuple_12_1_uks.root',
@@ -351,6 +99,7 @@ myFiles = [
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_first4PixelVtx/patTuple_7_1_V2q.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_first4PixelVtx/patTuple_8_1_pst.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZPrimeTauTau_first4PixelVtx/patTuple_9_1_3ql.root',
+# 
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx/patTuple_10_1_U5s.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx/patTuple_11_1_S6c.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/11feb/ZTauTau_first4PixelVtx/patTuple_12_1_659.root',
@@ -420,6 +169,27 @@ myFiles = [
 
 
 
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_10_1_F1h.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_11_1_gLa.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_12_1_oZN.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_13_1_Y17.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_14_1_Mmb.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_15_1_gCA.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_16_1_d7O.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_17_1_hNj.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_18_1_go5.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_1_1_Fjk.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_2_1_xHE.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_3_1_Yxn.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_4_1_SdR.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_5_1_0Na.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_6_1_em7.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_7_1_xbo.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_8_1_eFY.root',
+# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_9_1_w0U.root',
+# 
+# 
+# 
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_10_1_fcG.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_11_1_LRt.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_12_1_jAz.root',
@@ -440,24 +210,7 @@ myFiles = [
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_7_1_Hm7.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_8_1_dta.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau_first4PixelVtx/patTuple_9_1_O6Q.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_10_1_F1h.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_11_1_gLa.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_12_1_oZN.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_13_1_Y17.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_14_1_Mmb.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_15_1_gCA.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_16_1_d7O.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_17_1_hNj.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_18_1_go5.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_1_1_Fjk.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_2_1_xHE.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_3_1_Yxn.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_4_1_SdR.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_5_1_0Na.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_6_1_em7.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_7_1_xbo.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_8_1_eFY.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau_first4PixelVtx/patTuple_9_1_w0U.root',
+
 
 
 
@@ -503,28 +256,30 @@ myFiles = [
 
 
 
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_10_1_LHx.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_11_1_Ycl.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_12_1_qVI.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_13_1_Qpq.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_14_1_lex.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_15_1_q5M.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_16_1_tY1.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_17_1_nox.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_18_1_api.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_19_1_NW6.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_1_1_4Hj.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_20_1_fkO.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_21_1_cte.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_22_1_lv2.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_2_1_rtD.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_3_1_SKb.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_4_1_Msh.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_5_1_2kp.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_6_1_7Il.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_7_1_hSJ.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_8_1_x5r.root',
-# 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_9_1_Fu2.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_10_1_LHx.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_11_1_Ycl.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_12_1_qVI.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_13_1_Qpq.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_14_1_lex.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_15_1_q5M.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_16_1_tY1.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_17_1_nox.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_18_1_api.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_19_1_NW6.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_1_1_4Hj.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_20_1_fkO.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_21_1_cte.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_22_1_lv2.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_2_1_rtD.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_3_1_SKb.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_4_1_Msh.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_5_1_2kp.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_6_1_7Il.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_7_1_hSJ.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_8_1_x5r.root',
+'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZTauTau/patTuple_9_1_Fu2.root',
+# 
+# 
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_10_1_8Vv.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_11_1_dwD.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_12_1_r8g.root',
@@ -552,21 +307,17 @@ myFiles = [
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_7_1_wLZ.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_8_1_1kV.root',
 # 'root://eoscms//eos/cms/store/cmst3/user/manzoni/TauPOG/4feb/ZPrimeTauTau/patTuple_9_1_XBq.root',
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 
 # 'root://eoscms//eos/cms/store/group/phys_tau/CMSSW_5_3_x/TauTriggerStudies/31jan/ZprimeTautau/patTuple_10_1_8xh.root',
 # 'root://eoscms//eos/cms/store/group/phys_tau/CMSSW_5_3_x/TauTriggerStudies/31jan/ZprimeTautau/patTuple_11_1_h35.root',
 # 'root://eoscms//eos/cms/store/group/phys_tau/CMSSW_5_3_x/TauTriggerStudies/31jan/ZprimeTautau/patTuple_12_1_GP0.root',

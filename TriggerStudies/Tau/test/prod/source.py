@@ -1,1 +1,1 @@
-../source.py
+../source_empty.py
