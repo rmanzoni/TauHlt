@@ -39,6 +39,13 @@ process.fixedConePFTauIsolationChargedIsoPtSum = process.hpsPFTauMVA3IsolationCh
 )
 process.produceAndDiscriminateFixedConePFTaus += process.fixedConePFTauDiscriminationByIsolationUsingLeadingPion
 process.produceAndDiscriminateFixedConePFTaus += process.fixedConePFTauIsolationChargedIsoPtSum
+from RecoTauTag.RecoTau.RecoTauPiZeroProducer_cfi import ak5PFJetsRecoTauPiZeros
+process.ak5PFJetsRecoTauPiZeros = ak5PFJetsRecoTauPiZeros
+process.recoTauFixedConeSequence = cms.Sequence(
+    process.ak5PFJetsRecoTauPiZeros +
+    process.ak5PFJetsRecoTauChargedHadrons +
+    process.produceAndDiscriminateFixedConePFTaus
+    )
 
 # process.patDefaultSequence
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
@@ -79,51 +86,63 @@ process.makePatTaus += process.patTausFixedCone
 process.selectedPatTausFixedCone = process.selectedPatTaus.clone(
     src = cms.InputTag("patTausFixedCone")
 )
-process.patDefaultSequence += process.selectedPatTausFixedCone
-    
-# Jets
-from PhysicsTools.PatAlgos.tools.jetTools import *
-switchJetCollection(process,cms.InputTag('ak5PFJets'),
-                    doJTA        = True,
-                    doBTagging   = True,
-                    jetCorrLabel = ('AK5PF', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])),
-                    doType1MET   = False,
-                    genJetCollection=cms.InputTag("ak5GenJets"),
-                    doJetID      = True,
-                    postfix = '',
-                    outputModules = ['patOut']
-                    )
+process.patDefaultSequence.replace(process.selectedPatTaus,
+                                   process.selectedPatTaus+process.selectedPatTausFixedCone)
 
+# needed??    
+# Jets
+#from PhysicsTools.PatAlgos.tools.jetTools import *
+#switchJetCollection(process,cms.InputTag('ak5PFJets'),
+#                    doJTA        = True,
+#                    doBTagging   = True,
+#                    jetCorrLabel = ('AK5PF', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])),
+#                    doType1MET   = False,
+#                    genJetCollection=cms.InputTag("ak5GenJets"),
+#                    doJetID      = True,
+#                    postfix = '',
+#                    outputModules = ['patOut']
+#                    )
+#
 # MEt
-from PhysicsTools.PatAlgos.tools.metTools import *
-addPfMET(process, 'PF')
+#from PhysicsTools.PatAlgos.tools.metTools import *
+#addPfMET(process, 'PF')
 
 # General settings
 from PhysicsTools.PatAlgos.tools.coreTools import *
 if not isMC:
     runOnData(process,postfix='',outputModules=['patOut'])
-    process.pfJetMETcorr.jetCorrLabel='ak5PFL1FastL2L3Residual'
-    process.patMETsPF.addGenMET=False
-else:
-    process.pfJetMETcorr.jetCorrLabel='ak5PFL1FastL2L3'
-    process.patMETsPF.addGenMET=True
+    #process.pfJetMETcorr.jetCorrLabel='ak5PFL1FastL2L3Residual'
+    #process.patMETsPF.addGenMET=False
+#else:
+    #process.pfJetMETcorr.jetCorrLabel='ak5PFL1FastL2L3'
+    #process.patMETsPF.addGenMET=True
 
-process.pfJetMETcorr.skipEM=False
-process.pfJetMETcorr.skipMuons=False
-process.pfJetMETcorr.skipMuonSelection='isGlobalMuon'
-removeSpecificPATObjects(process, ['Photons'],postfix='',outputModules=['patOut'])
-removeCleaning(process,postfix='',outputModules=['patOut'])
+#process.pfJetMETcorr.skipEM=False
+#process.pfJetMETcorr.skipMuons=False
+#process.pfJetMETcorr.skipMuonSelection='isGlobalMuon'
 
+#removeSpecificPATObjects(process, ['Photons'],postfix='',outputModules=['patOut'])
+#removeCleaning(process,postfix='',outputModules=['patOut'])
+process.patDefaultSequence.remove(process.cleanPatCandidates)
+process.patDefaultSequence.remove(process.countPatCandidates)
+process.patDefaultSequence.remove(process.makePatPhotons)
+process.patCandidateSummary.candidates.remove(cms.InputTag("patPhotons") )
+process.patDefaultSequence.remove(process.selectedPatPhotons)
+process.selectedPatCandidateSummary.candidates.remove(cms.InputTag("selectedPatPhotons") )
+
+process.PFTau += process.recoTauFixedConeSequence
 process.offlineSequence = cms.Sequence(
-    process.recoTauClassicHPSSequence +
-    process.produceAndDiscriminateFixedConePFTaus +
+    #process.recoTauClassicHPSSequence +
+    #process.produceAndDiscriminateFixedConePFTaus +
+    process.PFTau +
     process.patDefaultSequence
     )
 
+#Needed??
 ## pf-isolation
 from CommonTools.ParticleFlow.Tools.pfIsolation import setupPFMuonIso, setupPFElectronIso
-process.muIsoSequence       = setupPFMuonIso(process,'muons')
-process.electronIsoSequence = setupPFElectronIso(process,'gsfElectrons')
+process.muIsoSequence       = cms.Sequence( setupPFMuonIso(process,'muons') )
+process.electronIsoSequence = cms.Sequence( setupPFElectronIso(process,'gedGsfElectrons') )
 from CommonTools.ParticleFlow.pfParticleSelection_cff import pfParticleSelectionSequence
 process.pfParticleSelectionSequence = pfParticleSelectionSequence
 process.pfIsolationSequence = cms.Sequence(
@@ -176,7 +195,8 @@ process.patMuons.isolationValues = cms.PSet(
         cms.InputTag("muPFIsoValueChargedAll04PFIso"),
         )
     )
-
+process.patElectrons.addElectronID = False
+process.patElectrons.electronIDSources = cms.PSet() #not used, potentiall problem
 process.patElectrons.isoDeposits = cms.PSet(
     pfAllParticles   = cms.InputTag("elPFIsoDepositPUPFIso"),      # all PU   CH+MU+E
     pfChargedHadrons = cms.InputTag("elPFIsoDepositChargedPFIso"), # all noPU CH
@@ -206,106 +226,106 @@ process.patElectrons.isolationValuesNoPFId = cms.PSet(
     )
 
 ## PAT taus from HLT taus
-process.hltPatTaus = cms.EDProducer(
-    "PATTauProducer",
-    # input
-    tauSource = cms.InputTag("hltIsoMuPFTaus"),
-    # add user data
-    userData = cms.PSet(
-      # add custom classes here
-      userClasses = cms.PSet(
-        src = cms.VInputTag('')
-      ),
-      # add doubles here
-      userFloats = cms.PSet(
-        src = cms.VInputTag('')
-      ),
-      # add ints here
-      userInts = cms.PSet(
-        src = cms.VInputTag('')
-      ),
-      # add candidate ptrs here
-      userCands = cms.PSet(
-        src = cms.VInputTag('')
-      ),
-      # add "inline" functions here
-      userFunctions = cms.vstring(),
-      userFunctionLabels = cms.vstring()
-    ),
-    # jet energy corrections
-    addTauJetCorrFactors = cms.bool(False),
-    tauJetCorrFactorsSource = cms.VInputTag(cms.InputTag("patTauJetCorrFactors")),
-    # embedding objects (for Calo- and PFTaus)
-    embedLeadTrack = cms.bool(False), ## embed in AOD externally stored leading track
-    embedSignalTracks = cms.bool(False), ## embed in AOD externally stored signal tracks
-    embedIsolationTracks = cms.bool(False), ## embed in AOD externally stored isolation tracks
-    # embedding objects (for PFTaus only)
-    embedLeadPFCand = cms.bool(False), ## embed in AOD externally stored leading PFCandidate
-    embedLeadPFChargedHadrCand = cms.bool(False), ## embed in AOD externally stored leading PFChargedHadron candidate
-    embedLeadPFNeutralCand = cms.bool(False), ## embed in AOD externally stored leading PFNeutral Candidate
-    embedSignalPFCands = cms.bool(False), ## embed in AOD externally stored signal PFCandidates
-    embedSignalPFChargedHadrCands = cms.bool(False), ## embed in AOD externally stored signal PFChargedHadronCandidates
-    embedSignalPFNeutralHadrCands = cms.bool(False), ## embed in AOD externally stored signal PFNeutralHadronCandidates
-    embedSignalPFGammaCands = cms.bool(False), ## embed in AOD externally stored signal PFGammaCandidates
-    embedIsolationPFCands = cms.bool(False), ## embed in AOD externally stored isolation PFCandidates
-    embedIsolationPFChargedHadrCands = cms.bool(False), ## embed in AOD externally stored isolation PFChargedHadronCandidates
-    embedIsolationPFNeutralHadrCands = cms.bool(False), ## embed in AOD externally stored isolation PFNeutralHadronCandidates
-    embedIsolationPFGammaCands = cms.bool(False), ## embed in AOD externally stored isolation PFGammaCandidates
-
-    # embed IsoDeposits
-    isoDeposits = cms.PSet(),
-    # user defined isolation variables the variables defined here will be accessible
-    # via pat::Tau::userIsolation(IsolationKeys key) with the key as defined in
-    # DataFormats/PatCandidates/interface/Isolation.h
-    #
-    # (set Pt thresholds for PFChargedHadrons (PFGammas) to 1.0 (1.5) GeV,
-    # matching the thresholds used when computing the tau iso. discriminators
-    # in RecoTauTag/RecoTau/python/PFRecoTauDiscriminationByIsolation_cfi.py)
-    userIsolation = cms.PSet(),
-    # tau ID (for efficiency studies)
-    addTauID     = cms.bool(True),
-    tauIDSources = cms.PSet(
-        # configure many IDs as InputTag <someName> = <someTag>
-        # you can comment out those you don't want to save some
-        # disk space
-        decayModeFinding = cms.InputTag("hltIsoMuPFTauTrackFindingDiscriminator"),
-        byIsolation = cms.InputTag("hltIsoMuPFTauLooseIsolationDiscriminatorNoFilters"),
-        byECalIsolation = cms.InputTag("hltIsoMuPFTauECalIsolationDiscriminatorNoFilters"),
-        byTrkIsolation = cms.InputTag("hltIsoMuPFTauTrkIsolationDiscriminatorNoFilters"),
-    ),
-    # mc matching configurables
-    addGenMatch      = cms.bool(False),
-    embedGenMatch    = cms.bool(False),
-    genParticleMatch = cms.InputTag(""),
-    addGenJetMatch   = cms.bool(False),
-    embedGenJetMatch = cms.bool(False),
-    genJetMatch      = cms.InputTag(""),
-    # efficiencies
-    addEfficiencies = cms.bool(False),
-    efficiencies    = cms.PSet(),
-    # resolution
-    addResolutions  = cms.bool(False),
-    resolutions     = cms.PSet()
-)
-process.hltPatTausStdVtx = process.hltPatTaus.clone(tauSource = 'hltIsoMuPFTausStdVtx')
-process.hltPatTausStdVtx.tauIDSources = cms.PSet(
-        decayModeFinding = cms.InputTag("hltIsoMuPFTauTrackFindingDiscriminatorStdVtx"),
-        byIsolation = cms.InputTag("hltIsoMuPFTauLooseIsolationDiscriminatorStdVtxNoFilters"),
-        byECalIsolation = cms.InputTag("hltIsoMuPFTauECalIsolationDiscriminatorStdVtxNoFilters"),
-        byTrkIsolation = cms.InputTag("hltIsoMuPFTauTrkIsolationDiscriminatorStdVtxNoFilters"),
-        )
-process.selectedHltPatTaus = cms.EDFilter(
-    "PATTauSelector",
-    src = cms.InputTag("hltPatTaus"),
-    cut = cms.string("pt>17"),
-    filter = cms.bool(False)
-    )
-process.selectedHltPatTausStdVtx = process.selectedHltPatTaus.clone(src='hltPatTausStdVtx')
-process.makeHltPatTaus = cms.Sequence(
-    process.hltPatTaus + process.selectedHltPatTaus +
-    process.hltPatTausStdVtx + process.selectedHltPatTausStdVtx 
-)
-process.offlineSequence += process.makeHltPatTaus
+#process.hltPatTaus = cms.EDProducer(
+#    "PATTauProducer",
+#    # input
+#    tauSource = cms.InputTag("hltIsoMuPFTaus"),
+#    # add user data
+#    userData = cms.PSet(
+#      # add custom classes here
+#      userClasses = cms.PSet(
+#        src = cms.VInputTag('')
+#      ),
+#      # add doubles here
+#      userFloats = cms.PSet(
+#        src = cms.VInputTag('')
+#      ),
+#      # add ints here
+#      userInts = cms.PSet(
+#        src = cms.VInputTag('')
+#      ),
+#      # add candidate ptrs here
+#      userCands = cms.PSet(
+#        src = cms.VInputTag('')
+#      ),
+#      # add "inline" functions here
+#      userFunctions = cms.vstring(),
+#      userFunctionLabels = cms.vstring()
+#    ),
+#    # jet energy corrections
+#    addTauJetCorrFactors = cms.bool(False),
+#    tauJetCorrFactorsSource = cms.VInputTag(cms.InputTag("patTauJetCorrFactors")),
+#    # embedding objects (for Calo- and PFTaus)
+#    embedLeadTrack = cms.bool(False), ## embed in AOD externally stored leading track
+#    embedSignalTracks = cms.bool(False), ## embed in AOD externally stored signal tracks
+#    embedIsolationTracks = cms.bool(False), ## embed in AOD externally stored isolation tracks
+#    # embedding objects (for PFTaus only)
+#    embedLeadPFCand = cms.bool(False), ## embed in AOD externally stored leading PFCandidate
+#    embedLeadPFChargedHadrCand = cms.bool(False), ## embed in AOD externally stored leading PFChargedHadron candidate
+#    embedLeadPFNeutralCand = cms.bool(False), ## embed in AOD externally stored leading PFNeutral Candidate
+#    embedSignalPFCands = cms.bool(False), ## embed in AOD externally stored signal PFCandidates
+#    embedSignalPFChargedHadrCands = cms.bool(False), ## embed in AOD externally stored signal PFChargedHadronCandidates
+#    embedSignalPFNeutralHadrCands = cms.bool(False), ## embed in AOD externally stored signal PFNeutralHadronCandidates
+#    embedSignalPFGammaCands = cms.bool(False), ## embed in AOD externally stored signal PFGammaCandidates
+#    embedIsolationPFCands = cms.bool(False), ## embed in AOD externally stored isolation PFCandidates
+#    embedIsolationPFChargedHadrCands = cms.bool(False), ## embed in AOD externally stored isolation PFChargedHadronCandidates
+#    embedIsolationPFNeutralHadrCands = cms.bool(False), ## embed in AOD externally stored isolation PFNeutralHadronCandidates
+#    embedIsolationPFGammaCands = cms.bool(False), ## embed in AOD externally stored isolation PFGammaCandidates
+#
+#    # embed IsoDeposits
+#    isoDeposits = cms.PSet(),
+#    # user defined isolation variables the variables defined here will be accessible
+#    # via pat::Tau::userIsolation(IsolationKeys key) with the key as defined in
+#    # DataFormats/PatCandidates/interface/Isolation.h
+#    #
+#    # (set Pt thresholds for PFChargedHadrons (PFGammas) to 1.0 (1.5) GeV,
+#    # matching the thresholds used when computing the tau iso. discriminators
+#    # in RecoTauTag/RecoTau/python/PFRecoTauDiscriminationByIsolation_cfi.py)
+#    userIsolation = cms.PSet(),
+#    # tau ID (for efficiency studies)
+#    addTauID     = cms.bool(True),
+#    tauIDSources = cms.PSet(
+#        # configure many IDs as InputTag <someName> = <someTag>
+#        # you can comment out those you don't want to save some
+#        # disk space
+#        decayModeFinding = cms.InputTag("hltIsoMuPFTauTrackFindingDiscriminator"),
+#        byIsolation = cms.InputTag("hltIsoMuPFTauLooseIsolationDiscriminatorNoFilters"),
+#        byECalIsolation = cms.InputTag("hltIsoMuPFTauECalIsolationDiscriminatorNoFilters"),
+#        byTrkIsolation = cms.InputTag("hltIsoMuPFTauTrkIsolationDiscriminatorNoFilters"),
+#    ),
+#    # mc matching configurables
+#    addGenMatch      = cms.bool(False),
+#    embedGenMatch    = cms.bool(False),
+#    genParticleMatch = cms.InputTag(""),
+#    addGenJetMatch   = cms.bool(False),
+#    embedGenJetMatch = cms.bool(False),
+#    genJetMatch      = cms.InputTag(""),
+#    # efficiencies
+#    addEfficiencies = cms.bool(False),
+#    efficiencies    = cms.PSet(),
+#    # resolution
+#    addResolutions  = cms.bool(False),
+#    resolutions     = cms.PSet()
+#)
+#process.hltPatTausStdVtx = process.hltPatTaus.clone(tauSource = 'hltIsoMuPFTausStdVtx')
+#process.hltPatTausStdVtx.tauIDSources = cms.PSet(
+#        decayModeFinding = cms.InputTag("hltIsoMuPFTauTrackFindingDiscriminatorStdVtx"),
+#        byIsolation = cms.InputTag("hltIsoMuPFTauLooseIsolationDiscriminatorStdVtxNoFilters"),
+#        byECalIsolation = cms.InputTag("hltIsoMuPFTauECalIsolationDiscriminatorStdVtxNoFilters"),
+#        byTrkIsolation = cms.InputTag("hltIsoMuPFTauTrkIsolationDiscriminatorStdVtxNoFilters"),
+#        )
+#process.selectedHltPatTaus = cms.EDFilter(
+#    "PATTauSelector",
+#    src = cms.InputTag("hltPatTaus"),
+#    cut = cms.string("pt>17"),
+#    filter = cms.bool(False)
+#    )
+#process.selectedHltPatTausStdVtx = process.selectedHltPatTaus.clone(src='hltPatTausStdVtx')
+#process.makeHltPatTaus = cms.Sequence(
+#    process.hltPatTaus + process.selectedHltPatTaus +
+#    process.hltPatTausStdVtx + process.selectedHltPatTausStdVtx 
+#)
+#process.offlineSequence += process.makeHltPatTaus
 
 ## cuts on selected pat-objects
 ## && offline event selection (global mu + some iso, isolated tau, mu+tau pair)
@@ -343,11 +363,18 @@ process.selectedPatElectronsUserIsoEmbedded  = cms.EDProducer(
     electronTag = cms.InputTag("selectedPatElectrons"),
     )
 
+elIsoFromReco = "(PflowIsolationVariables.sumChargedParticlePt+" \
+                "max(0,PflowIsolationVariables.sumPhotonEt+" \
+                "PflowIsolationVariables.sumNeutralHadronEt-" \
+                "0.5*PflowIsolationVariables.sumPUPt) )/pt"
 process.selectedElectrons = cms.EDFilter(
     "PATElectronSelector",
     #src = cms.InputTag("selectedPatElectronsUserEmbedded"),
     src = cms.InputTag("selectedPatElectronsUserIsoEmbedded"),
-    cut = cms.string("pt>15 && abs(eta)<2.5 && "+simpleCutsVeto),
+    #src = cms.InputTag("selectedPatElectrons"),
+    #cut = cms.string("pt>15 && abs(eta)<2.5 && "+simpleCutsVeto),#iso??
+    cut = cms.string("pt>15 && abs(eta)<2.5 && "+simpleCutsVeto+" && userFloat('PFRelIsoDB04v3')<0.50"),
+    #cut = cms.string("pt>15 && abs(eta)<2.5 && "+simpleCutsVeto+" && "+elIsoFromReco+"+<0.50"),
     filter = cms.bool(False)
     )
 
@@ -366,10 +393,16 @@ process.selectedPatTausUserEmbeddedFixedCone = process.selectedPatTausUserEmbedd
     tauTag = cms.InputTag('selectedPatTausFixedCone')
 )
 
+muIsoFromReco = "(pfIsolationR04.sumChargedParticlePt+" \
+                "max(0,pfIsolationR04.sumPhotonEt+" \
+                "pfIsolationR04.sumNeutralHadronEt-" \
+                "0.5*pfIsolationR04.sumPUPt) )/pt"
 process.selectedMuons = cms.EDFilter(
     "PATMuonSelector",
     src = cms.InputTag("selectedPatMuonsUserEmbedded"),
+    #src = cms.InputTag("selectedPatMuons"),
     cut = cms.string("pt>15 && abs(eta)<2.4 && isGlobalMuon && isPFMuon && isTrackerMuon && userFloat('PFRelIsoDB04v2')<0.50"),
+    #cut = cms.string("pt>15 && abs(eta)<2.4 && isGlobalMuon && isPFMuon && isTrackerMuon && "+muIsoFromReco+"+<0.50"), 
     filter = cms.bool(False)
     )
 
@@ -384,6 +417,17 @@ process.selectedTausFixedCone = process.selectedTaus.clone(
     cut = cms.string("pt>17 && abs(eta)<2.3 && tauID('byLeadingPion')>0.5")
 )
 
+process.isolatedElectrons = cms.EDFilter(
+    "PATElectronSelector",
+    src = cms.InputTag("selectedPatElectronsUserIsoEmbedded"),
+    cut = cms.string("pt>15 && abs(eta)<2.5 && "+simpleCutsVeto+" && userFloat('PFRelIsoDB04v3')<0.50"),
+    filter = cms.bool(False)
+    )
+process.isolatedElectronsCounter = cms.EDFilter(
+    "CandViewCountFilter",
+    src = cms.InputTag("isolatedElectrons"),
+    minNumber = cms.uint32(1)
+    )
 process.isolatedMuons = cms.EDFilter(
     "PATMuonSelector",
     src = cms.InputTag("selectedPatMuonsUserEmbedded"),
@@ -408,35 +452,63 @@ process.isolatedTausCounter = cms.EDFilter(
     minNumber = cms.uint32(1)
     )
 
+process.elTauPairs  = cms.EDProducer(
+    "CandViewShallowCloneCombiner",
+    decay = cms.string("isolatedElectrons isolatedTaus"),
+    checkCharge = cms.bool(False),
+    cut         = cms.string("sqrt((daughter(0).eta-daughter(1).eta)*(daughter(0).eta-daughter(1).eta)+  min( abs(daughter(0).phi-daughter(1).phi), 2*3.1415926 - abs(daughter(0).phi-daughter(1).phi)  ) *  min( abs(daughter(0).phi-daughter(1).phi), 2*3.1415926 - abs(daughter(0).phi-daughter(1).phi)  )  )>0.5")
+    )
+process.elTauPairsCounter = cms.EDFilter(
+    "CandViewCountFilter",
+    src = cms.InputTag("elTauPairs"),
+    minNumber = cms.uint32(1)
+    )
 process.muTauPairs  = cms.EDProducer(
     "CandViewShallowCloneCombiner",
     decay = cms.string("isolatedMuons isolatedTaus"),
     checkCharge = cms.bool(False),
     cut         = cms.string("sqrt((daughter(0).eta-daughter(1).eta)*(daughter(0).eta-daughter(1).eta)+  min( abs(daughter(0).phi-daughter(1).phi), 2*3.1415926 - abs(daughter(0).phi-daughter(1).phi)  ) *  min( abs(daughter(0).phi-daughter(1).phi), 2*3.1415926 - abs(daughter(0).phi-daughter(1).phi)  )  )>0.5")
-                                    )
+    )
 process.muTauPairsCounter = cms.EDFilter(
     "CandViewCountFilter",
     src = cms.InputTag("muTauPairs"),
     minNumber = cms.uint32(1)
     )
 
-process.offlineSelectionSequence = cms.Sequence(
-    process.selectedPrimaryVertices+process.primaryVertexCounter+
+process.offlineObjectSelectionSequence = cms.Sequence(
+    process.selectedPrimaryVertices+
     process.selectedPatElectronsUserIsoEmbedded+process.selectedElectrons+
-    process.selectedPatMuonsUserEmbedded+process.selectedMuons+process.isolatedMuons+process.isolatedMuonsCounter+
+    process.selectedPatMuonsUserEmbedded+process.selectedMuons+
     process.selectedPatTausUserEmbedded+process.selectedTaus+
-    process.selectedPatTausUserEmbeddedFixedCone+process.selectedTausFixedCone+
-    process.isolatedTaus+process.isolatedTausCounter
-    +process.muTauPairs+process.muTauPairsCounter)
+    process.selectedPatTausUserEmbeddedFixedCone+process.selectedTausFixedCone
+)
+process.offlineSequence += process.offlineObjectSelectionSequence
 
-process.offlineSequence += process.offlineSelectionSequence
+process.offlineMuTauSelectionSequence = cms.Sequence(
+    process.primaryVertexCounter+
+    process.isolatedMuons+process.isolatedMuonsCounter+
+    process.isolatedTaus+process.isolatedTausCounter+
+    process.muTauPairs+process.muTauPairsCounter)
+
+process.offlineElTauSelectionSequence = cms.Sequence(
+    process.primaryVertexCounter+
+    process.isolatedElectrons+process.isolatedElectronsCounter+
+    process.isolatedTaus+process.isolatedTausCounter+
+    process.elTauPairs+process.elTauPairsCounter)
+
+process.offlineTauSelectionSequence = cms.Sequence(
+    process.primaryVertexCounter+
+    process.isolatedTaus+process.isolatedTausCounter)
+
+
 
 ## Customised output content
 process.patOut.outputCommands = ['drop *']
 process.patOut.outputCommands.append('keep *_patMETs*_*_*')
 process.patOut.outputCommands.append('keep *_hltOnlineBeamSpot_*_*')
 process.patOut.outputCommands.append('keep *_hltIsoMuonVertex_*_*')
-process.patOut.outputCommands.append('keep *_hltPixelVertices*_*_*')
+process.patOut.outputCommands.append('keep *_hltIsoEleVertex_*_*')
+process.patOut.outputCommands.append('keep *_hltPixelVertices_*_*')
 process.patOut.outputCommands.append('keep *_hltOnlinePrimaryVertices_*_*')
 process.patOut.outputCommands.append('keep *_offlinePrimaryVertices_*_*')
 process.patOut.outputCommands.append('keep *_selectedPrimaryVertices_*_*')
@@ -456,10 +528,20 @@ process.patOut.outputCommands.append('keep *_patTrigger_*_*')
 process.patOut.outputCommands.append('keep *_patTriggerEvent_*_*')
 process.patOut.outputCommands.append('keep *_hltKT6PFJetsForTaus_rho_*')
 process.patOut.outputCommands.append('keep *_kt6PFJets_rho_*')
-process.patOut.outputCommands.append("keep *_UCT2015Producer_*_*")
-process.patOut.outputCommands.append("keep *_uct2015L1ExtraParticles_*_*")
-process.patOut.outputCommands.append("keep *_l1extraParticles_*_*")
-process.patOut.outputCommands.append("keep *_genParticles_*_*")
+process.patOut.outputCommands.append('keep *_UCT2015Producer_*_*')
+process.patOut.outputCommands.append('keep *_uct2015L1ExtraParticles_*_*')
+process.patOut.outputCommands.append('keep *_l1extraParticles_*_*')
+process.patOut.outputCommands.append('keep *_genParticles_*_*')
+process.patOut.outputCommands.append('keep *_hltMuons_*_*')
+process.patOut.outputCommands.append('keep *_hltL2Muons_*_*')
+process.patOut.outputCommands.append('keep *_hltL3crIsoL1sMu14erORMu16erL1f0L2f14QL3f17QL3crIsoRhoFiltered0p15_*_*')
+process.patOut.outputCommands.append('keep *_hltL3MuonCandidates_*_*')
+process.patOut.outputCommands.append('keep *_hltEle22WP90RhoTrackIsoFilter_*_*')
+process.patOut.outputCommands.append('keep *_hltPixelMatchElectronsL1Seeded_*_*')
+process.patOut.outputCommands.append('keep *_towerMaker_*_*')
+process.patOut.outputCommands.append('keep *_hltTowerMakerForPF_*_*')
+process.patOut.outputCommands.append('keep *_selectedTausFixedCone_*_*')
+process.patOut.outputCommands.append('keep *_addPileupInfo_*_*')
 process.patOut.outputCommands.append("keep *_hltTrackAndTauJetsIter*_*_*")
 process.patOut.outputCommands.append("keep *_hltAntiKT5TrackJetsIter*_*_*")
 process.patOut.outputCommands.append("keep *_hlt*PFlowTrackSelectionHighPurity_*_*")
@@ -489,7 +571,8 @@ process.patTrigger.onlyStandAlone = False
 process.patTriggerEvent.patTriggerMatches = cms.VInputTag()
 #hltProcessName = '*'
 #hltProcessName = 'TEST'
-hltProcessName = 'TauHLT'
+#hltProcessName = 'TauHLT'
+hltProcessName = 'HLT' #keep info from oryginal triggers
 process.patTrigger.processName = hltProcessName
 process.patTriggerEvent.processName = hltProcessName
 process.patTrgSequence = cms.Sequence(
