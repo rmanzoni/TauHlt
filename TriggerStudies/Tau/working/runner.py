@@ -1,7 +1,8 @@
 import ROOT
 import PATreader
 from array import array
-from files import *
+# from files import *
+from listfiles import *
 
 bins = array('d',[0.,17.5,20.,22.5,25.,30.,40.,50.,60.,80.,120.,250.,500,])
 # bins = array('d',[0.,17.5,20.,22.5,25.,30.,40.,50.,60.,80.,120.])
@@ -131,7 +132,17 @@ index.update({'position7' :ROOT.TH1F( 'position7'     , '' , 50, 0,50)} )
 # myFiles = ['/afs/cern.ch/work/m/manzoni/TauHLT/CMSSW_5_3_14_patch2_trg/src/TriggerStudies/Tau/test/patTuple_originalIter0Jet_v2.root',] 
 failingEvents = [28150788,38979698,9377365,34287744,2073115,62411153,61730373,45685986,47009379,4002807,22405779,56029277,18718809,52991929,13991388,1953725,16196942,67886619,16228470,16138268,16277738,27435007,9365765,22024092,28389058,27226213,27228342,30051102,19575720,62078292,3835767,21848492,2682170,11037065,16270377,26689779,24705865,38498563,40177109,6063353,3924919,61479375,24710730,38972916,38951854,56561840,61830800,19760180,16253201,36230639,33444947,12782522,45053556,4441121,66238069,65020368,24505983,11490191,12838373,14199880,53197377,1382277,12812297,1249504,21513095,25618944,16215296,37977062,68700985,40605935,61890250,13727268,65101560,38184411,9353868,38410378,16160789,16273551,63543902,26934110,9368795,37232492,11498432,52813775,52536300,70645969,6524418,9355742,16189544,16190949]  
 
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt0_noPVconstraint')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt0_PVconstraint')
+myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_PVconstraint')
 
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt0_noPVconstraint.root'  ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt0_PVconstraint.root'    ,'recreate')
+outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_online_matches_offline.root' ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_PVconstraint.root'   ,'recreate')
+
+for fil in myFiles : print fil
 
 myAnalyzer = PATreader.PATreader(myFiles                               , 
                                  basic_histos         = basic_histos   , 
@@ -147,12 +158,6 @@ myAnalyzer.looper(maxEvents=-1, pickEvents=[], verbose=False)
 # myAnalyzer.writeTree( myAnalyzer.tree, myAnalyzer.treeFile)
 myAnalyzer.printSummary()
 
-outFile = ROOT.TFile.Open('out_firstPixVtx_standard.root' ,'recreate')
-# outFile = ROOT.TFile.Open('out_first4PixVtx_sorted4power_threshold25gev.root' ,'recreate')
-# outFile = ROOT.TFile.Open('out_offlineVtx.root'    ,'recreate')
-# outFile = ROOT.TFile.Open('out_firstPixelVtx.root' ,'recreate')
-# outFile = ROOT.TFile.Open('out_first2PixelVtx.root','recreate')
-# outFile = ROOT.TFile.Open('out_first4PixelVtx.root','recreate')
 
 outFile.cd()
 

@@ -1,10 +1,10 @@
 # /users/mbluj/CMSSW_7_0_0/Tau2015/V3 (CMSSW_7_0_0_pre12)
 
 # User switches
-isMC = True
-is50ns = False #matters only for MC
-isFake = False #matters only for MC
-type = "All" # possible types: "All", "MuTau", "ElTau", "Tau"
+isMC   = True
+is50ns = False # matters only for MC
+isFake = True  # matters only for MC
+type   = "MuTau" # possible types: "All", "MuTau", "ElTau", "Tau"
 
 print "Analysis type: "+type
 
@@ -2246,6 +2246,7 @@ process.hltPFJetPixelSeedsFromPixelTracks = cms.EDProducer( "SeedGeneratorFromPr
     originHalfLength = cms.double( 0.3 ),
     useProtoTrackKinematics = cms.bool( False ),
     usePV = cms.bool( False ),
+    #usePV = cms.bool( True ),  ## PV constraint, uses the first PixVtx
     InputVertexCollection = cms.InputTag( "hltPixelVertices" ),
     TTRHBuilder = cms.string( "hltESPTTRHBuilderPixelOnly" ),
     InputCollection = cms.InputTag( "hltPixelTracks" ),
