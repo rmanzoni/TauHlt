@@ -32,18 +32,18 @@ l1CaloScales.L1CaloEmEtScaleLSB = 0.5 # must be the same as egammaLSB
 
 
 # This determines what scale the UCT sees for EG objects.
-l1CaloScales.L1CaloEmThresholds = cms.vdouble()
+#l1CaloScales.L1CaloEmThresholds = cms.vdouble()
 
 # These are modifications to allow more than 7 bits of rank in the EIC path.
 #l1CaloScales.L1CaloEmMaxLinScale = cms.uint32(0x3ff)
 #l1CaloScales.L1CaloEmMaxRank = cms.uint32(0x3f)
 
-_EGTAU_PRECISION = 7
+#_EGTAU_PRECISION = 7
 # Determine the l1CaloScales max rank which corresponds to this precision.
-l1CaloScales.L1CaloEmMaxRank = cms.uint32(
-    (1 << (_EGTAU_PRECISION - 1)) - 1)
-l1CaloScales.L1CaloEmThresholds = [
-    float(x) for x in range(2 ** (_EGTAU_PRECISION-1))]
+#l1CaloScales.L1CaloEmMaxRank = cms.uint32(
+#    (1 << (_EGTAU_PRECISION - 1)) - 1)
+#l1CaloScales.L1CaloEmThresholds = [
+#    float(x) for x in range(2 ** (_EGTAU_PRECISION-1))]
 
 # Ideal
 eg_calib_v1 = [

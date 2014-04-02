@@ -145,6 +145,7 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                                                                     //jet derived value in the lookup table. (See regionSF_cfi.py) Multiplied by 2 
                                                                     //because gamma is given in regionPhysicalET (=regionEt*regionLSB), and we want regionEt= physicalEt/LSB and LSB=.5.
 
+                //gamma=gamma/2;;
 
 		int pumbin = (int) puMult/22; //396 Regions. Bins are 22 wide. Dividing by 22 gives which bin# of the 18 bins. 
 
@@ -158,7 +159,7 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 		        double corrpum0pt = pum0pt*alpha+gamma+energyECAL2x1; //add back in ECAL energy, calibrate regions(not including the ECAL2x1).
                         //if(energyECAL2x1>20) std::cout<<energyECAL2x1<<"  "<<regionET<<"   "<<puSub<<"   -->"<<pum0pt<<"     "<<corrpum0pt<<"   "<<std::endl;
 
-		        if (corrpum0pt <0 || pum0pt<0) {corrpum0pt=0;} //zero floor
+		        if (corrpum0pt<0) {corrpum0pt=0;} //zero floor
 
 		        regionEtCorr = (corrpum0pt);	
                 }

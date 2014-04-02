@@ -743,6 +743,7 @@ void UCT2015Producer::makeEGTaus() {
       egtCand != newEMCands->end(); egtCand++){
     double et = egPhysicalEt(*egtCand);
     if(et > egtSeed) {
+
       for(L1CaloRegionCollection::const_iterator region = newRegions->begin();
 	  region != newRegions->end(); region++) {
 	if(egtCand->regionId().iphi() == region->gctPhi() &&
