@@ -134,13 +134,41 @@ failingEvents = [28150788,38979698,9377365,34287744,2073115,62411153,61730373,45
 
 # myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt0_noPVconstraint')
 # myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt0_PVconstraint')
-myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint')
 # myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_PVconstraint')
+
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p1')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p2')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p3')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p5')
+# myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p7')
+
+myFiles = listfiles('/store/cmst3/user/manzoni/TauPOG/mt/13TeV/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/onlinePt17_noPVconstraint_threshold0p3_notrackProb1permille')
+
+
+
+
+
 
 # outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt0_noPVconstraint.root'  ,'recreate')
 # outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt0_PVconstraint.root'    ,'recreate')
-outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_online_matches_offline.root' ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint.root' ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_online_matches_offline.root' ,'recreate')
 # outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_PVconstraint.root'   ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_PVconstraint_online_matches_offline.root'   ,'recreate')
+
+
+
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p1.root'   ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p2.root'   ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p3.root'   ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p5.root'   ,'recreate')
+# outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p7.root'   ,'recreate')
+outFile = ROOT.TFile.Open('mt_13TeV_VBF_HToTauTau_M-125_13TeV-powheg-pythia6_onlinePt17_noPVconstraint_threshold0p3_notrackProb1permille.root'   ,'recreate')
+
+
+
+# outFile = ROOT.TFile.Open('sandbox.root'   ,'recreate')
 
 for fil in myFiles : print fil
 
