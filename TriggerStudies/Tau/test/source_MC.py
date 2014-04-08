@@ -2,6 +2,7 @@ process.source.fileNames = [
 #     '/store/mc/Summer12_DR53X/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball/AODSIM/PU25bx50_START53_V19D-v1/20000/02C8446A-7FCD-E211-8E9F-0025B3E06394.root',
 '/store/cmst3/user/manzoni/TauPOG/AODSIMRAW/genZtoMu15Tau18/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/patTuple_10_2_ZyS.root',
 
+# 'file:/afs/cern.ch/work/m/manzoni/TauHLT/700/CMSSW_7_0_0/src/TriggerStudies/Tau/working/pickevents_merged.root',
 # 'root://xrootd.ba.infn.it//store/user/abdollah/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/VBF_HToTauTau_M-125_13TeV-powheg-pythia6_genZtoMu15Tau1/adc44b4e4e9b38c5bea420ed79ae084b/skimGenMuTau_100_1_q5u.root',
 # 'root://xrootd.ba.infn.it//store/user/abdollah/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/VBF_HToTauTau_M-125_13TeV-powheg-pythia6_genZtoMu15Tau1/adc44b4e4e9b38c5bea420ed79ae084b/skimGenMuTau_10_2_mou.root',
 # 'root://xrootd.ba.infn.it//store/user/abdollah/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/VBF_HToTauTau_M-125_13TeV-powheg-pythia6_genZtoMu15Tau1/adc44b4e4e9b38c5bea420ed79ae084b/skimGenMuTau_11_2_MCY.root',

@@ -44,6 +44,8 @@ class PATreader() :
     
     self.bookTree('syncTree', treetitle = 'Events')
     
+    f1 = open('./events_onl_off_mismatch_pthlt17.txt', 'w+')
+
     for loopId, event in enumerate(self.events):
       
       if self.breakLoop : break
@@ -84,7 +86,19 @@ class PATreader() :
       tau.offlineLeadingTrack = self.checkLeadingTrack(tau)
       if tau.offlineLeadingTrack is False : continue
       
-      #if abs(onlPixVtx[0].z() - offVtx[0].z()) < 0.2: continue
+#       if abs(onlPixVtx[0].z() - offVtx[0].z()) > 0.2 : #continue
+#         print >>f1, event.eventAuxiliary().run(),':',event.eventAuxiliary().luminosityBlock(),':',event.eventAuxiliary().event()
+# 
+#       ## Riccardo
+#       continue
+      
+      
+      
+      
+      
+      
+      
+      
       
       if verbose :
         print '\nevent', event.eventAuxiliary().event()   

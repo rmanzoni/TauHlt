@@ -34,7 +34,6 @@
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "RecoPixelVertexing/PixelVertexFinding/interface/PVClusterComparer.h"
 
-
 class PixelVertexCollectionTrimmer : public edm::EDProducer {
    public:
       explicit PixelVertexCollectionTrimmer(const edm::ParameterSet&);
@@ -80,19 +79,30 @@ PixelVertexCollectionTrimmer::produce(edm::Event& iEvent, const edm::EventSetup&
    std::auto_ptr<reco::VertexCollection> vtxs_trim(new reco::VertexCollection);
 
    double sumpt2                ;
-   double sumpt2previous = -99. ;
+   //double sumpt2previous = -99. ;
    int    counter        = 0    ;
    PVClusterComparer PVCluster  ;  
+
+// this is not the logic we want, at least for now
+// if requires the sumpt2 for vtx_n to be > threshold * sumpt2 vtx_n-1
+//    for (reco::VertexCollection::const_iterator vtx = vtxs->begin(); vtx != vtxs->end(); ++vtx, ++counter){
+//      if (counter > maxVtx_) break ;
+//      sumpt2 = PVCluster.pTSquaredSum(*vtx) ;
+//      if (sumpt2 > sumpt2previous*fractionSumPt2_ && sumpt2 > minSumPt2_ ) vtxs_trim->push_back(*vtx) ; 
+//      else if (counter == 0 )                                              vtxs_trim->push_back(*vtx) ;
+//      sumpt2previous = sumpt2 ;
+//    }
+
+   double sumpt2first = PVCluster.pTSquaredSum(*(vtxs->begin())) ;
+
    for (reco::VertexCollection::const_iterator vtx = vtxs->begin(); vtx != vtxs->end(); ++vtx, ++counter){
      if (counter > maxVtx_) break ;
      sumpt2 = PVCluster.pTSquaredSum(*vtx) ;
-     if (sumpt2 > sumpt2previous*fractionSumPt2_ && sumpt2 > minSumPt2_ ) vtxs_trim->push_back(*vtx) ; 
-     else if (counter == 0 )                                              vtxs_trim->push_back(*vtx) ;
-     sumpt2previous = sumpt2 ;
+     if (sumpt2 >= sumpt2first*fractionSumPt2_ && sumpt2 > minSumPt2_ ) vtxs_trim->push_back(*vtx) ; 
    }
-   
+      
    iEvent.put(vtxs_trim);
- 
+    
 }
 
 // ------------ method called once each job just before starting event loop  ------------
