@@ -13,6 +13,7 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.RawToDigi_Data_cff import *
 from L1Trigger.UCT2015.Lut import *
 from L1Trigger.UCT2015.regionSF_cfi import *
+from L1Trigger.UCT2015.jetSF_cfi import *
 
 
 # Modify the HCAL TPGs according to the proposed HTR modification.  If the HCAL
@@ -40,20 +41,20 @@ uctDigis = cms.EDProducer(
 
 CorrectedDigis = cms.EDProducer(
     "RegionCorrection",
-    puMultCorrect = cms.bool(True),
+    puMultCorrect = cms.bool(True), # PU corrections
+    applyCalibration = cms.bool(False), # region calibration (Work in Progress))
     regionLSB = RCTConfigProducers.jetMETLSB,
     egammaLSB = cms.double(1.0), # This has to correspond with the value from L1CaloEmThresholds
     regionSF = regionSF_8TeV_data,
     regionSubtraction = regionSubtraction_8TeV_data
 )
 
-
 UCT2015Producer = cms.EDProducer(
     "UCT2015Producer",
-    puCorrect = cms.bool(False), #regions corrected instead
-    puMultCorrect = cms.bool(True), #Change this one for producer
-    puCorrectSums = cms.bool(False), # regions corrected instead
-    useUICrho = cms.bool(True),
+    puCorrectHI = cms.bool(False), #old style, regions corrected instead
+    applyJetCalibration = cms.bool(True), # To Calibrate Jets directly in the producer 
+    puMultCorrect = cms.bool(True), # PU subtract regions
+    useUICrho = cms.bool(False), 
     useHI = cms.bool(False),
     # All of these uint32 thresholds are in GeV.
     puETMax = cms.uint32(7),
@@ -65,10 +66,11 @@ UCT2015Producer = cms.EDProducer(
     tauSeed = cms.uint32(7),
     egtSeed = cms.uint32(2),
     relativeTauIsolationCut = cms.double(1.),
-    relativeJetIsolationCut = cms.double(1.),
+    relativeJetIsolationCut = cms.double(0.5),
     switchOffTauIso= cms.double(60),
     egammaLSB = cms.double(1.0), # This has to correspond with the value from L1CaloEmThresholds
     regionLSB = RCTConfigProducers.jetMETLSB,
+    jetSF = jetSF_8TeV_data,
 )
 
 uctDigiStep = cms.Sequence(

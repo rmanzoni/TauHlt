@@ -64,10 +64,13 @@ class RegionCorrection : public edm::EDProducer {
 
 		// ----------member data ---------------------------
 
-		bool debug;
+		bool debug_;
 
 		unsigned int puMult;
-		bool puMultCorrect;
+		bool puMultCorrect_;
+                bool applyCalibration_;
+
+                InputTag uctDigis_;
 
 		//egLSB and regionLSB no longer used
                 double egLSB_;
@@ -76,31 +79,40 @@ class RegionCorrection : public edm::EDProducer {
 		L1CaloRegionCollection CorrectedRegionList;
 		vector<double> m_regionSF;
 		vector<double> m_regionSubtraction;
+                int pumbin;
+                
+
 };
 
 
 RegionCorrection::RegionCorrection(const edm::ParameterSet& iConfig) :
-	puMultCorrect(iConfig.getParameter<bool>("puMultCorrect")),
+        debug_(iConfig.getUntrackedParameter<bool>("debug",false)),
+	puMultCorrect_(iConfig.getParameter<bool>("puMultCorrect")),
+        applyCalibration_(iConfig.getParameter<bool>("applyCalibration")),
+        uctDigis_(iConfig.getUntrackedParameter<edm::InputTag>("uctDigisTag", edm::InputTag("uctDigis"))),
+
         egLSB_(iConfig.getParameter<double>("egammaLSB")),
 	regionLSB_(iConfig.getParameter<double>("regionLSB"))
 {
 	m_regionSF=iConfig.getParameter<vector<double> >("regionSF");
 	m_regionSubtraction=iConfig.getParameter<vector<double> >("regionSubtraction");
 	produces<L1CaloRegionCollection>("CorrectedRegions");
+        produces<int>("PUM0Level");
 }
 
 
 	void
 RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-	if(!puMultCorrect) return;
 	std::auto_ptr<L1CaloRegionCollection> CorrectedRegions(new L1CaloRegionCollection);
+        std::auto_ptr<int> PUM0Level(new int);
+
 
 	Handle<L1CaloRegionCollection> notCorrectedRegions;
         Handle<L1CaloEmCollection> EMCands;
 
-	iEvent.getByLabel("uctDigis", notCorrectedRegions);
-        iEvent.getByLabel("uctDigis", EMCands);
+	iEvent.getByLabel(uctDigis_, notCorrectedRegions);
+        iEvent.getByLabel(uctDigis_, EMCands);
 
 	//-------- does something with the notCorrectedRegions
 	puMult = 0;
@@ -109,9 +121,9 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			notCorrectedRegions->begin();
 			notCorrectedRegion != notCorrectedRegions->end(); notCorrectedRegion++){
 		double regionET =  regionEt(*notCorrectedRegion);
-		// cout << "regionET: " << regionET <<endl; 
 		if (regionET > 0) {puMult++;}
 	}
+        pumbin = (int) puMult/22; //396 Regions. Bins are 22 wide. Dividing by 22 gives which bin# of the 18 bins. 
 
 
 	CorrectedRegionList.clear();
@@ -121,7 +133,7 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 		double regionET =  regionEt(*notCorrectedRegion);
 		unsigned int regionEta = notCorrectedRegion->gctEta();
 
-                double regionEtCorr=0;
+               int regionEtCorr=0;
 
                 // Only non-empty regions are corrected
                 if(regionET!=0) {
@@ -139,30 +151,32 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         }
                 }
 
-
 		double alpha = m_regionSF[2*regionEta + 0]; //Region Scale factor (See regionSF_cfi.py)
-		double gamma = 2*((m_regionSF[2*regionEta + 1])/9); //Region Offset. It needs to be divided by nine from the 
+		double gamma = 2*((m_regionSF[2*regionEta + 1])/3); //Region Offset. It needs to be divided by nine from the 
                                                                     //jet derived value in the lookup table. (See regionSF_cfi.py) Multiplied by 2 
                                                                     //because gamma is given in regionPhysicalET (=regionEt*regionLSB), and we want regionEt= physicalEt/LSB and LSB=.5.
+                if(!applyCalibration_ || regionET<20) {alpha=1;  gamma=0;}
 
-                //gamma=gamma/2;;
 
-		int pumbin = (int) puMult/22; //396 Regions. Bins are 22 wide. Dividing by 22 gives which bin# of the 18 bins. 
 
 		double puSub = m_regionSubtraction[18*regionEta+pumbin]*2;
           	//The values in m_regionSubtraction are MULTIPLIED by RegionLSB=.5 (physicalRegionEt), so 
           	//to get back unmultiplied regionSubtraction we want to multiply the number by 2 (aka divide by LSB).
+                if(!puMultCorrect_) puSub=0; 
 
-                if(regionET - puSub<0) {regionEtCorr =0 ;} 
+
+                if(regionET - puSub<1) {regionEtCorr =0 ;} 
                 else {
-		        double pum0pt =  (regionET - puSub-energyECAL2x1); //subtract ECAl energy 
+		        double pum0pt =  (int) (regionET - puSub-energyECAL2x1); //subtract ECAl energy 
 		        double corrpum0pt = pum0pt*alpha+gamma+energyECAL2x1; //add back in ECAL energy, calibrate regions(not including the ECAL2x1).
-                        //if(energyECAL2x1>20) std::cout<<energyECAL2x1<<"  "<<regionET<<"   "<<puSub<<"   -->"<<pum0pt<<"     "<<corrpum0pt<<"   "<<std::endl;
 
 		        if (corrpum0pt<0) {corrpum0pt=0;} //zero floor
 
-		        regionEtCorr = (corrpum0pt);	
+		        regionEtCorr = (int) (corrpum0pt);	
                 }
+                if(debug_){
+                        std::cout<<regionEta<<"   "<<regionET<<"   "<<energyECAL2x1<<"   "<<puSub<<"     "<<alpha<<"     "<<gamma<<"-->"<<regionEtCorr<<"   "<<std::endl;
+                        }
                 }
 
 		if(regionEta<18 && regionEta>3) //if !hf
@@ -184,13 +198,16 @@ RegionCorrection::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			unsigned hfRgn=notCorrectedRegion->rctRegionIndex();
 			CorrectedRegionList.push_back(L1CaloRegion(regionEtCorr,fineGrain,crate, hfRgn));
 		}
+
 	}
 	for(L1CaloRegionCollection::const_iterator CorrectedNewRegion = CorrectedRegionList.begin();
 			CorrectedNewRegion != CorrectedRegionList.end(); ++CorrectedNewRegion) {
 		CorrectedRegions->push_back(*CorrectedNewRegion);
 	}
 
-
+        (*PUM0Level) = pumbin; 
+        
 	iEvent.put(CorrectedRegions, "CorrectedRegions");
+        iEvent.put(PUM0Level,"PUM0Level");
 }
 DEFINE_FWK_MODULE(RegionCorrection);
