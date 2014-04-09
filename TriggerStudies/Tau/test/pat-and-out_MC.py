@@ -562,6 +562,13 @@ process.patOut.outputCommands.append("keep *_hlt*PFJetCtfWithMaterialTracks_*_*"
 process.patOut.outputCommands.append("keep *_hlt*PFJetCkfTrackCandidates_*_*")
 process.patOut.outputCommands.append("keep *_PFJetPixelSeedsFromPixelTracks*_*_*")
 process.patOut.outputCommands.append("keep *_hlt*PFJetPixelSeeds*_*_*")
+process.patOut.outputCommands.append("keep *_hltSiPixelClusters_*_*")
+# process.patOut.outputCommands.append("keep *_hltESPPixelCPEGeneric_*_*")
+# process.patOut.outputCommands.append("keep *_hltCaloJetL1FastJetCorrected_*_*")
+process.patOut.outputCommands.append("keep *_hltCaloJet*_*_*")
+process.patOut.outputCommands.append("keep *_fastPrimaryVertices_*_*")
+
+
 
 
 ## Pat trigger

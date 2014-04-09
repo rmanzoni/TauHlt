@@ -2676,7 +2676,7 @@ process.hltIter2PFJetPixelSeeds = cms.EDProducer( "SeedGeneratorFromRegionHitsED
         searchOpt = cms.bool( True ),
         JetSrc = cms.InputTag( "hltTrackAndTauJetsIter1" ),
         originZPos = cms.double( 0.0 ),
-        ptMin = cms.double( 1.2 ), ## will be raised 2.4 and eventually 7.5
+        ptMin = cms.double( 1.2 ),
         measurementTrackerName = cms.string( "hltIter2MaskedMeasurementTrackerEvent" )
       )
     ),
@@ -5578,6 +5578,54 @@ process.hltPFTau20TrackLooseIso = cms.EDFilter( "HLT1PFTau",
     triggerType = cms.int32( 84 )
 )
 
+## RM PFV test
+process.fastPrimaryVertices = cms.EDProducer( "FastPrimaryVertexWithWeightsProducer",
+    maxZ                      = cms.double( 24.0 ),
+    clusters                  = cms.InputTag( "hltSiPixelClusters" ),
+    pixelCPE                  = cms.string( "hltESPPixelCPEGeneric" ),
+    beamSpot                  = cms.InputTag( "hltOnlineBeamSpot" ),
+    jets                      = cms.InputTag( "hltCaloJetL1FastJetCorrected" ),
+  
+    njets                     = cms.int32( 999  ),
+    maxJetEta                 = cms.double( 2.6 ), 
+    minJetPt                  = cms.double( 0.  ),
+
+    barrel                    = cms.bool(True),  
+    maxSizeX                  = cms.double( 2.1 ),
+    maxDeltaPhi               = cms.double( 0.21 ),
+    PixelCellHeightOverWidth  = cms.double( 1.8 ),
+    weight_charge_down        = cms.double(11*1000),
+    weight_charge_up          = cms.double(190*1000),
+    maxSizeY_q                = cms.double( 2 ),  
+    minSizeY_q                = cms.double( -0.6 ), 
+ 
+    weight_dPhi               = cms.double( 0.13888888 ), 
+    weight_SizeX1             = cms.double(0.88),
+    weight_rho_up             = cms.double( 22),
+    weight_charge_peak        = cms.double(22*1000),
+    peakSizeY_q               = cms.double( 1.0 ), 
+
+    endCap                    = cms.bool(True),  
+    minJetEta_EC              = cms.double( 1.3 ),  
+    maxJetEta_EC              = cms.double( 2.6 ),  
+    maxDeltaPhi_EC            = cms.double( 0.14 ),
+    EC_weight                 = cms.double( 0.008 ),
+    weight_dPhi_EC            = cms.double( 0.064516129 ), 
+    
+    zClusterWidth_step1       = cms.double( 2.0),
+
+    zClusterWidth_step2       = cms.double( 0.65), 
+    zClusterSearchArea_step2  = cms.double( 3.0),
+    weightCut_step2           = cms.double( 0.05),
+
+    zClusterWidth_step3       = cms.double( 0.3), 
+    zClusterSearchArea_step3  = cms.double( 0.55),
+    weightCut_step3           = cms.double( 0.1),
+
+)
+## RM 
+
+
 process.HLTL1UnpackerSequence = cms.Sequence( process.hltGtDigis + process.hltGctDigis + process.hltL1GtObjectMap + process.hltL1extraParticles )
 process.HLTBeamSpot = cms.Sequence( process.hltScalersRawToDigi + process.hltOnlineBeamSpot )
 process.HLTBeginSequence = cms.Sequence( process.hltTriggerType + process.HLTL1UnpackerSequence + process.HLTBeamSpot )
@@ -5624,7 +5672,7 @@ process.HLTIsoEleLooseIsoPFTauSequence = cms.Sequence( process.hltPFTauJetTracks
 process.HLTLooseIsoPFTauSequence = cms.Sequence( process.hltPFTauJetTracksAssociator + process.hltPFTauTagInfo + process.hltPFTaus + process.hltPFTauTrackFindingDiscriminator + process.hltPFTauLooseIsolationDiscriminator + process.hltSelectedPFTausTrackFinding + process.hltSelectedPFTausTrackFindingLooseIsolation )
 
 if type=="All" or type=="MuTau":
-    process.HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v8 = cms.Path( process.HLTBeginSequence + process.hltL1sMu14erORMu16er + process.hltPreIsoMu17eta2p1LooseIsoPFTau20 + process.hltL1fL1sMu14erORMu16erL1Filtered0 + process.HLTL2muonrecoSequence + process.hltL2fL1sMu14erORMu16erL1f0L2Filtered14Q + process.HLTL3muonrecoSequence + process.hltL3fL1sMu14erORMu16erL1f0L2f14QL3Filtered17Q + process.HLTL3muoncaloisorecoSequenceNoBools + process.HLTL3muonisorecoSequence + process.hltL3crIsoL1sMu14erORMu16erL1f0L2f14QL3f17QL3crIsoRhoFiltered0p15 + process.HLTRecoJetSequencePrePF + process.hltTauJet5 + process.HLTPFTriggerSequenceMuTau + process.HLTIsoMuLooseIsoPFTauSequence + process.HLTEndSequence )
+    process.HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v8 = cms.Path( process.HLTBeginSequence + process.hltL1sMu14erORMu16er + process.hltPreIsoMu17eta2p1LooseIsoPFTau20 + process.hltL1fL1sMu14erORMu16erL1Filtered0 + process.HLTL2muonrecoSequence + process.hltL2fL1sMu14erORMu16erL1f0L2Filtered14Q + process.HLTL3muonrecoSequence + process.hltL3fL1sMu14erORMu16erL1f0L2f14QL3Filtered17Q + process.HLTL3muoncaloisorecoSequenceNoBools + process.HLTL3muonisorecoSequence + process.hltL3crIsoL1sMu14erORMu16erL1f0L2f14QL3f17QL3crIsoRhoFiltered0p15 + process.HLTRecoJetSequencePrePF + process.hltTauJet5 + process.HLTPFTriggerSequenceMuTau + process.HLTIsoMuLooseIsoPFTauSequence + process.HLTEndSequence + process.HLTRecoJetSequenceAK5L1FastJetCorrected + process.fastPrimaryVertices) ## last 2 entries by riccardo, should be removed
 if type=="All" or type=="ElTau":
     process.HLT_Ele22_eta2p1_WP90Rho_LooseIsoPFTau20_v8 = cms.Path( process.HLTBeginSequence + process.hltL1sL1SingleIsoEG18erORIsoEG20erOREG22 + process.hltPreEle22eta2p1WP90RhoLooseIsoPFTau20 + process.HLTEle22WP90RhoSequence + process.HLTRecoJetSequencePrePF + process.hltTauJet5 + process.hltOverlapFilterIsoEle20CaloJet5 + process.HLTPFTriggerSequenceForTaus + process.HLTIsoEleLooseIsoPFTauSequence + process.HLTEndSequence )
 if type=="All" or type=="Tau":
