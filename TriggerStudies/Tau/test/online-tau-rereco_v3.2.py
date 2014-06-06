@@ -113,7 +113,7 @@ process.hltPFTauLooseIsolationDiscriminatorOffVtx = cms.EDProducer(
           minGammaEt = cms.double( 0.5 ),
           minTrackPixelHits = cms.uint32( 0 ),
           minTrackHits = cms.uint32( 3 ),
-          maxDeltaZ = cms.double( 0.4 ),
+          maxDeltaZ = cms.double( 0.2 ), #MB
           maxTransverseImpactParameter = cms.double( 0.2 )
           ),
        primaryVertexSrc = cms.InputTag( "offlinePrimaryVertices" ),
@@ -170,7 +170,7 @@ process.hltPFTauECalIsolationDiscriminatorOffVtx = cms.EDProducer(
           minGammaEt = cms.double( 0.5 ),
           minTrackPixelHits = cms.uint32( 0 ),
           minTrackHits = cms.uint32( 3 ),
-          maxDeltaZ = cms.double( 0.4 ),
+          maxDeltaZ = cms.double( 0.2 ), #MB
           maxTransverseImpactParameter = cms.double( 0.2 )
           ),
        primaryVertexSrc = cms.InputTag( "offlinePrimaryVertices" ),
@@ -226,7 +226,7 @@ process.hltPFTauTrkIsolationDiscriminatorOffVtx = cms.EDProducer(
           minGammaEt = cms.double( 0.5 ),
           minTrackPixelHits = cms.uint32( 0 ),
           minTrackHits = cms.uint32( 3 ),
-          maxDeltaZ = cms.double( 0.4 ),
+          maxDeltaZ = cms.double( 0.2 ), #MB
           maxTransverseImpactParameter = cms.double( 0.2 )
           ),
        primaryVertexSrc = cms.InputTag( "offlinePrimaryVertices" ),
@@ -372,7 +372,7 @@ process.hltPFTauPiZeros = cms.EDProducer( "RecoTauPiZeroProducer",
           primaryVertexSrc = cms.InputTag( "hltIsoMuonVertex" ),
           leadingTrkOrPFCandOption = cms.string( "leadPFCand" ),
           signalQualityCuts = cms.PSet(
-            maxDeltaZ = cms.double( 0.4 ),
+            maxDeltaZ = cms.double( 0.2 ), #MB
             minTrackPt = cms.double( 0.0 ),
             useTracksInsteadOfPFHadrons = cms.bool( False ),
             maxTrackChi2 = cms.double( 1000.0 ),
@@ -419,7 +419,7 @@ process.hltTauPFJetsRecoTauChargedHadrons = cms.EDProducer(
              maxTrackChi2 = cms.double(1000.0), #MB 100.0->1000.0
              minTrackPixelHits = cms.uint32(0),
              minGammaEt = cms.double(0.5),
-             maxDeltaZ = cms.double(0.4),
+             maxDeltaZ = cms.double(0.2), #MB
              minNeutralHadronEt = cms.double(30.0),
              maxTransverseImpactParameter = cms.double(0.2) #MB: 0.03->0.2
           ),
@@ -511,7 +511,7 @@ process.hltPFTausNPSansRef = cms.EDProducer( "RecoTauProducer",
             minGammaEt = cms.double( 0.5 ),
             minTrackPixelHits = cms.uint32( 0 ),
             minTrackHits = cms.uint32( 3 ),
-            maxDeltaZ = cms.double( 0.4 ),
+            maxDeltaZ = cms.double( 0.2 ), #MB
             maxTransverseImpactParameter = cms.double( 0.2 )
           ),
           isolationQualityCuts = cms.PSet( 
@@ -889,6 +889,16 @@ process.hltPFTauSequncePxl2NP = cms.Sequence(
     )
 
 ## pxl2 with different signal area definitions
+process.hltPFTausPxl2R08N3NPSansRef = process.hltPFTausPxl2NPSansRef.clone()
+process.hltPFTausPxl2R08N3NPSansRef.builders[0].signalConeChargedHadrons = "0.08"
+process.hltPFTausPxl2R08N3NPSansRef.builders[0].signalConePiZeros = "0.08"
+process.hltPFTausPxl2R08N3NPSansRef.builders[0].maxSignalConeChargedHadrons = 3
+
+process.hltPFTausPxl2ShrN3NPSansRef = process.hltPFTausPxl2NPSansRef.clone()
+process.hltPFTausPxl2ShrN3NPSansRef.builders[0].signalConeChargedHadrons = "min(max(3.5/pt(),0.08),0.12)"
+process.hltPFTausPxl2ShrN3NPSansRef.builders[0].signalConePiZeros = "min(max(3.5/pt(),0.08),0.12)"
+process.hltPFTausPxl2ShrN3NPSansRef.builders[0].maxSignalConeChargedHadrons = 3
+
 process.hltPFTausPxl2R15N3NPSansRef = process.hltPFTausPxl2NPSansRef.clone()
 process.hltPFTausPxl2R15N3NPSansRef.builders[0].signalConeChargedHadrons = "0.15"
 process.hltPFTausPxl2R15N3NPSansRef.builders[0].signalConePiZeros = "0.15"
@@ -901,7 +911,7 @@ process.hltPFTausPxl2R18N3NPSansRef.builders[0].maxSignalConeChargedHadrons = 3
 
 process.hltPFTausPxl2R12N5NPSansRef = process.hltPFTausPxl2NPSansRef.clone()
 process.hltPFTausPxl2R12N5NPSansRef.builders[0].signalConeChargedHadrons = "0.12"
-process.hltPFTausPxl2R12N5NPSansRef.builders[0].signalConePiZeros = "0.15"
+process.hltPFTausPxl2R12N5NPSansRef.builders[0].signalConePiZeros = "0.12"
 process.hltPFTausPxl2R12N5NPSansRef.builders[0].maxSignalConeChargedHadrons = 5
 
 process.hltPFTausPxl2R15N5NPSansRef = process.hltPFTausPxl2NPSansRef.clone()
@@ -916,7 +926,7 @@ process.hltPFTausPxl2R18N5NPSansRef.builders[0].maxSignalConeChargedHadrons = 5
 
 process.hltPFTausPxl2R12NInfNPSansRef = process.hltPFTausPxl2NPSansRef.clone()
 process.hltPFTausPxl2R12NInfNPSansRef.builders[0].signalConeChargedHadrons = "0.12"
-process.hltPFTausPxl2R12NInfNPSansRef.builders[0].signalConePiZeros = "0.15"
+process.hltPFTausPxl2R12NInfNPSansRef.builders[0].signalConePiZeros = "0.12"
 process.hltPFTausPxl2R12NInfNPSansRef.builders[0].maxSignalConeChargedHadrons = 999
 
 process.hltPFTausPxl2R15NInfNPSansRef = process.hltPFTausPxl2NPSansRef.clone()
@@ -928,6 +938,11 @@ process.hltPFTausPxl2R18NInfNPSansRef = process.hltPFTausPxl2NPSansRef.clone()
 process.hltPFTausPxl2R18NInfNPSansRef.builders[0].signalConeChargedHadrons = "0.18"
 process.hltPFTausPxl2R18NInfNPSansRef.builders[0].signalConePiZeros = "0.18"
 process.hltPFTausPxl2R18NInfNPSansRef.builders[0].maxSignalConeChargedHadrons = 999
+
+process.hltPFTausPxl2R08N3NP = process.hltPFTausPxl2NP.clone(
+    src = "hltPFTausPxl2R08N3NPSansRef")
+process.hltPFTausPxl2ShrN3NP = process.hltPFTausPxl2NP.clone(
+    src = "hltPFTausPxl2ShrN3NPSansRef")
 
 process.hltPFTausPxl2R15N3NP = process.hltPFTausPxl2NP.clone(
     src = "hltPFTausPxl2R15N3NPSansRef")
@@ -945,6 +960,68 @@ process.hltPFTausPxl2R15NInfNP = process.hltPFTausPxl2NP.clone(
     src = "hltPFTausPxl2R15NInfNPSansRef")
 process.hltPFTausPxl2R18NInfNP = process.hltPFTausPxl2NP.clone(
     src = "hltPFTausPxl2R18NInfNPSansRef")
+
+#R08N3
+process.hltPFTauTrackFindingDiscriminatorPxl2R08N3NP = process.hltPFTauTrackFindingDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauLooseIsolationDiscriminatorPxl2R08N3NP = process.hltPFTauLooseIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauLooseIsolationDiscriminator5hitsPxl2R08N3NP = process.hltPFTauLooseIsolationDiscriminator5hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauLooseIsolationDiscriminator3hitsPxl2R08N3NP = process.hltPFTauLooseIsolationDiscriminator3hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauECalIsolationDiscriminatorPxl2R08N3NP = process.hltPFTauECalIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauTrkIsolationDiscriminatorPxl2R08N3NP = process.hltPFTauTrkIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauTrkIsolationDiscriminator5hitsPxl2R08N3NP = process.hltPFTauTrkIsolationDiscriminator5hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauTrkIsolationDiscriminator3hitsPxl2R08N3NP = process.hltPFTauTrkIsolationDiscriminator3hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauLooseIsolationDiscriminatorPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauLooseIsolationDiscriminator5hitsPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauLooseIsolationDiscriminator3hitsPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauECalIsolationDiscriminatorPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauTrkIsolationDiscriminatorPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauTrkIsolationDiscriminator5hitsPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauTrkIsolationDiscriminator3hitsPxl2R08N3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"
+process.hltPFTauAgainstMuonDiscriminatorLoosePxl2R08N3NP = process.hltPFTauAgainstMuonDiscriminatorLoosePxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauAgainstMuonDiscriminatorHoPPxl2R08N3NP = process.hltPFTauAgainstMuonDiscriminatorHoPPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+process.hltPFTauAgainstElectronDiscriminatorLoosePxl2R08N3NP = process.hltPFTauAgainstElectronDiscriminatorLooseOffVtx.clone(
+    PFTauProducer = "hltPFTausPxl2R08N3NP")
+
+#ShrN3
+process.hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP = process.hltPFTauTrackFindingDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauLooseIsolationDiscriminatorPxl2ShrN3NP = process.hltPFTauLooseIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauLooseIsolationDiscriminator5hitsPxl2ShrN3NP = process.hltPFTauLooseIsolationDiscriminator5hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauLooseIsolationDiscriminator3hitsPxl2ShrN3NP = process.hltPFTauLooseIsolationDiscriminator3hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauECalIsolationDiscriminatorPxl2ShrN3NP = process.hltPFTauECalIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauTrkIsolationDiscriminatorPxl2ShrN3NP = process.hltPFTauTrkIsolationDiscriminatorPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauTrkIsolationDiscriminator5hitsPxl2ShrN3NP = process.hltPFTauTrkIsolationDiscriminator5hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauTrkIsolationDiscriminator3hitsPxl2ShrN3NP = process.hltPFTauTrkIsolationDiscriminator3hitsPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauLooseIsolationDiscriminatorPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauLooseIsolationDiscriminator5hitsPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauLooseIsolationDiscriminator3hitsPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauECalIsolationDiscriminatorPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauTrkIsolationDiscriminatorPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauTrkIsolationDiscriminator5hitsPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauTrkIsolationDiscriminator3hitsPxl2ShrN3NP.Prediscriminants.leadTrack.Producer = "hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"
+process.hltPFTauAgainstMuonDiscriminatorLoosePxl2ShrN3NP = process.hltPFTauAgainstMuonDiscriminatorLoosePxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauAgainstMuonDiscriminatorHoPPxl2ShrN3NP = process.hltPFTauAgainstMuonDiscriminatorHoPPxl2NP.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
+process.hltPFTauAgainstElectronDiscriminatorLoosePxl2ShrN3NP = process.hltPFTauAgainstElectronDiscriminatorLooseOffVtx.clone(
+    PFTauProducer = "hltPFTausPxl2ShrN3NP")
 
 #R15N3
 process.hltPFTauTrackFindingDiscriminatorPxl2R15N3NP = process.hltPFTauTrackFindingDiscriminatorPxl2NP.clone(
@@ -1199,6 +1276,9 @@ process.hltPFTauSequncePxl2NPTuning = cms.Sequence(
     process.hltPFTauPiZerosPxl2 +
     process.hltTauPFJetsRecoTauChargedHadronsPxl2 +
 
+    process.hltPFTausPxl2R08N3NPSansRef +
+    process.hltPFTausPxl2ShrN3NPSansRef +
+
     process.hltPFTausPxl2R15N3NPSansRef +
     process.hltPFTausPxl2R18N3NPSansRef +
     process.hltPFTausPxl2R12N5NPSansRef +
@@ -1208,6 +1288,9 @@ process.hltPFTauSequncePxl2NPTuning = cms.Sequence(
     process.hltPFTausPxl2R15NInfNPSansRef +
     process.hltPFTausPxl2R18NInfNPSansRef +
 
+    process.hltPFTausPxl2R08N3NP +
+    process.hltPFTausPxl2ShrN3NP +
+
     process.hltPFTausPxl2R15N3NP +
     process.hltPFTausPxl2R18N3NP +
     process.hltPFTausPxl2R12N5NP +
@@ -1216,6 +1299,30 @@ process.hltPFTauSequncePxl2NPTuning = cms.Sequence(
     process.hltPFTausPxl2R12NInfNP +
     process.hltPFTausPxl2R15NInfNP +
     process.hltPFTausPxl2R18NInfNP +
+
+    process.hltPFTauTrackFindingDiscriminatorPxl2R08N3NP +
+    process.hltPFTauLooseIsolationDiscriminatorPxl2R08N3NP + 
+    process.hltPFTauLooseIsolationDiscriminator5hitsPxl2R08N3NP + 
+    process.hltPFTauLooseIsolationDiscriminator3hitsPxl2R08N3NP + 
+    process.hltPFTauECalIsolationDiscriminatorPxl2R08N3NP +
+    process.hltPFTauTrkIsolationDiscriminatorPxl2R08N3NP +
+    process.hltPFTauTrkIsolationDiscriminator5hitsPxl2R08N3NP +
+    process.hltPFTauTrkIsolationDiscriminator3hitsPxl2R08N3NP
+    +process.hltPFTauAgainstMuonDiscriminatorLoosePxl2R08N3NP
+    +process.hltPFTauAgainstMuonDiscriminatorHoPPxl2R08N3NP
+    +process.hltPFTauAgainstElectronDiscriminatorLoosePxl2R08N3NP+
+
+    process.hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP +
+    process.hltPFTauLooseIsolationDiscriminatorPxl2ShrN3NP + 
+    process.hltPFTauLooseIsolationDiscriminator5hitsPxl2ShrN3NP + 
+    process.hltPFTauLooseIsolationDiscriminator3hitsPxl2ShrN3NP + 
+    process.hltPFTauECalIsolationDiscriminatorPxl2ShrN3NP +
+    process.hltPFTauTrkIsolationDiscriminatorPxl2ShrN3NP +
+    process.hltPFTauTrkIsolationDiscriminator5hitsPxl2ShrN3NP +
+    process.hltPFTauTrkIsolationDiscriminator3hitsPxl2ShrN3NP
+    +process.hltPFTauAgainstMuonDiscriminatorLoosePxl2ShrN3NP
+    +process.hltPFTauAgainstMuonDiscriminatorHoPPxl2ShrN3NP
+    +process.hltPFTauAgainstElectronDiscriminatorLoosePxl2ShrN3NP+
 
     process.hltPFTauTrackFindingDiscriminatorPxl2R15N3NP +
     process.hltPFTauLooseIsolationDiscriminatorPxl2R15N3NP + 
@@ -1756,6 +1863,38 @@ process.hltPatTausPxl2NP.tauIDSources = cms.PSet(
 process.selectedHltPatTausPxl2NP = process.selectedHltPatTaus.clone(src='hltPatTausPxl2NP')
 
 ###
+process.hltPatTausPxl2R08N3NP = hltPatTausGeneric.clone(tauSource = 'hltPFTausPxl2R08N3NP')
+process.hltPatTausPxl2R08N3NP.tauIDSources = cms.PSet(
+        decayModeFinding = cms.InputTag("hltPFTauTrackFindingDiscriminatorPxl2R08N3NP"),
+        byIsolation = cms.InputTag("hltPFTauLooseIsolationDiscriminatorPxl2R08N3NP"),
+        byIsolation5hits = cms.InputTag("hltPFTauLooseIsolationDiscriminator5hitsPxl2R08N3NP"),
+        byIsolation3hits = cms.InputTag("hltPFTauLooseIsolationDiscriminator3hitsPxl2R08N3NP"),
+        byECalIsolation = cms.InputTag("hltPFTauECalIsolationDiscriminatorPxl2R08N3NP"),
+        byTrkIsolation = cms.InputTag("hltPFTauTrkIsolationDiscriminatorPxl2R08N3NP"),
+        byTrkIsolation5hits = cms.InputTag("hltPFTauTrkIsolationDiscriminator5hitsPxl2R08N3NP"),
+        byTrkIsolation3hits = cms.InputTag("hltPFTauTrkIsolationDiscriminator3hitsPxl2R08N3NP"),
+        againstMuonLoose = cms.InputTag("hltPFTauAgainstMuonDiscriminatorLoosePxl2R08N3NP"),
+        againstMuonHoP = cms.InputTag("hltPFTauAgainstMuonDiscriminatorHoPPxl2R08N3NP"),
+        againstElectron = cms.InputTag("hltPFTauAgainstElectronDiscriminatorLoosePxl2R08N3NP"),
+        )
+process.selectedHltPatTausPxl2R08N3NP = process.selectedHltPatTaus.clone(src='hltPatTausPxl2R08N3NP')
+
+process.hltPatTausPxl2ShrN3NP = hltPatTausGeneric.clone(tauSource = 'hltPFTausPxl2ShrN3NP')
+process.hltPatTausPxl2ShrN3NP.tauIDSources = cms.PSet(
+        decayModeFinding = cms.InputTag("hltPFTauTrackFindingDiscriminatorPxl2ShrN3NP"),
+        byIsolation = cms.InputTag("hltPFTauLooseIsolationDiscriminatorPxl2ShrN3NP"),
+        byIsolation5hits = cms.InputTag("hltPFTauLooseIsolationDiscriminator5hitsPxl2ShrN3NP"),
+        byIsolation3hits = cms.InputTag("hltPFTauLooseIsolationDiscriminator3hitsPxl2ShrN3NP"),
+        byECalIsolation = cms.InputTag("hltPFTauECalIsolationDiscriminatorPxl2ShrN3NP"),
+        byTrkIsolation = cms.InputTag("hltPFTauTrkIsolationDiscriminatorPxl2ShrN3NP"),
+        byTrkIsolation5hits = cms.InputTag("hltPFTauTrkIsolationDiscriminator5hitsPxl2ShrN3NP"),
+        byTrkIsolation3hits = cms.InputTag("hltPFTauTrkIsolationDiscriminator3hitsPxl2ShrN3NP"),
+        againstMuonLoose = cms.InputTag("hltPFTauAgainstMuonDiscriminatorLoosePxl2ShrN3NP"),
+        againstMuonHoP = cms.InputTag("hltPFTauAgainstMuonDiscriminatorHoPPxl2ShrN3NP"),
+        againstElectron = cms.InputTag("hltPFTauAgainstElectronDiscriminatorLoosePxl2ShrN3NP"),
+        )
+process.selectedHltPatTausPxl2ShrN3NP = process.selectedHltPatTaus.clone(src='hltPatTausPxl2ShrN3NP')
+
 process.hltPatTausPxl2R15N3NP = hltPatTausGeneric.clone(tauSource = 'hltPFTausPxl2R15N3NP')
 process.hltPatTausPxl2R15N3NP.tauIDSources = cms.PSet(
         decayModeFinding = cms.InputTag("hltPFTauTrackFindingDiscriminatorPxl2R15N3NP"),
@@ -1908,6 +2047,10 @@ process.hltTauSequence = cms.Sequence(
     process.hltPatTausPxl2NP + process.selectedHltPatTausPxl2NP +
 
     process.hltPFTauSequncePxl2NPTuning +
+
+    process.hltPatTausPxl2R08N3NP + process.selectedHltPatTausPxl2R08N3NP +
+    process.hltPatTausPxl2ShrN3NP + process.selectedHltPatTausPxl2ShrN3NP +
+
     process.hltPatTausPxl2R15N3NP + process.selectedHltPatTausPxl2R15N3NP +
     process.hltPatTausPxl2R18N3NP + process.selectedHltPatTausPxl2R18N3NP +
     process.hltPatTausPxl2R12N5NP + process.selectedHltPatTausPxl2R12N5NP +
