@@ -1,5 +1,18 @@
 
 process.load("L1Trigger.UCT2015.emulation_cfi")
+#process.load("L1Trigger.UCT2015.emulationMC_cfi")
+  
+# Determine which calibration to use
+#from L1Trigger.UCT2015.emulation_cfi import \
+#        eg_calib_v1, eg_calib_v3, eg_calib_v4
+
+#ecal_calibration = eg_calib_v4 #eg_calib_v1 eg_calib_v3
+#process.RCTConfigProducers.eGammaECalScaleFactors = ecal_calibration
+#process.RCTConfigProducers.jetMETECalScaleFactors = ecal_calibration
+#process.UCT2015EClusterProducer.ecalCalibration = ecal_calibration
+
+#process.RCTConfigProducers.eicIsolationThreshold = 3
+#process.RCTConfigProducers.hActivityCut = 0.5
 
 process.UCT2015Producer.do4x4Taus = True # 'standard' 4x4 L1Taus
 process.UCT2015Producer4x8 = process.UCT2015Producer.clone(do4x4Taus = False) # 4x8 L1Taus
