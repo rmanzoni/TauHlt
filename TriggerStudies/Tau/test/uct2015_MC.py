@@ -58,28 +58,28 @@ process.uctEmulatorStep.replace(
 #process.load("L1Trigger.UCT2015.uct2015L1ExtraParticles_cfi")
 process.load("L1Trigger.UCT2015.uctl1extraparticles_cfi")
 #clone UCT gt stuff to have isoTau version in parallel (4x4)
-process.gctUCTDigis.tauIsolated  = cms.InputTag("UCT2015Producer","RelaxedTauUnpacked")
-process.gctUCTDigis2 = process.gctUCTDigis.clone(
+process.uctGctDigis.tauIsolated  = cms.InputTag("UCT2015Producer","RelaxedTauUnpacked")
+process.uctGctDigis2 = process.uctGctDigis.clone(
     tauIsolated  = cms.InputTag("UCT2015Producer","IsolatedTauUnpacked")
 )
 process.l1extraParticlesUCT2 = process.l1extraParticlesUCT.clone(
-    etTotalSource = cms.InputTag("gctUCTDigis2"),
-    nonIsolatedEmSource = cms.InputTag("gctUCTDigis2","nonIsoEm"),
-    etMissSource = cms.InputTag("gctUCTDigis2"),
-    htMissSource = cms.InputTag("gctUCTDigis2"),
-    forwardJetSource = cms.InputTag("gctUCTDigis2","forJets"),
-    centralJetSource = cms.InputTag("gctUCTDigis2","cenJets"),
-    tauJetSource = cms.InputTag("gctUCTDigis2","tauJets"),
-    isolatedEmSource = cms.InputTag("gctUCTDigis2","isoEm"),
-    etHadSource = cms.InputTag("gctUCTDigis2"),
-    hfRingEtSumsSource = cms.InputTag("gctUCTDigis2"),
-    hfRingBitCountsSource = cms.InputTag("gctUCTDigis2")
+    etTotalSource = cms.InputTag("uctGctDigis2"),
+    nonIsolatedEmSource = cms.InputTag("uctGctDigis2","nonIsoEm"),
+    etMissSource = cms.InputTag("uctGctDigis2"),
+    htMissSource = cms.InputTag("uctGctDigis2"),
+    forwardJetSource = cms.InputTag("uctGctDigis2","forJets"),
+    centralJetSource = cms.InputTag("uctGctDigis2","cenJets"),
+    tauJetSource = cms.InputTag("uctGctDigis2","tauJets"),
+    isolatedEmSource = cms.InputTag("uctGctDigis2","isoEm"),
+    etHadSource = cms.InputTag("uctGctDigis2"),
+    hfRingEtSumsSource = cms.InputTag("uctGctDigis2"),
+    hfRingBitCountsSource = cms.InputTag("uctGctDigis2")
 )
 process.gtUCTDigis2 = process.gtUCTDigis.clone(
-    GctInputTag  = cms.InputTag("gctUCTDigis2")
+    GctInputTag  = cms.InputTag("uctGctDigis2")
 )
-process.uct2015L1Extra.replace(process.gctUCTDigis,
-                               process.gctUCTDigis*process.gctUCTDigis2)
+process.uct2015L1Extra.replace(process.uctGctDigis,
+                               process.uctGctDigis*process.uctGctDigis2)
 process.uct2015L1Extra.replace(process.gtUCTDigis,
                                process.gtUCTDigis*process.gtUCTDigis2)
 process.uct2015L1Extra.replace(process.l1extraParticlesUCT,
@@ -113,7 +113,7 @@ process.l1extraParticlesUCT4x8 = process.l1extraParticlesUCT.clone(
     hfRingEtSumsSource = cms.InputTag("uctGctDigis4x8"),
     hfRingBitCountsSource = cms.InputTag("uctGctDigis4x8")
 )
-process.l1extraParticlesUCT4x8isoiso = process.l1extraParticlesUCT.clone(
+process.l1extraParticlesUCT4x8iso = process.l1extraParticlesUCT.clone(
     etTotalSource = cms.InputTag("uctGctDigis4x8iso"),
     nonIsolatedEmSource = cms.InputTag("uctGctDigis4x8iso","nonIsoEm"),
     etMissSource = cms.InputTag("uctGctDigis4x8iso"),
@@ -127,8 +127,8 @@ process.l1extraParticlesUCT4x8isoiso = process.l1extraParticlesUCT.clone(
     hfRingBitCountsSource = cms.InputTag("uctGctDigis4x8iso")
 )
 process.uct2015L1Extra.replace(
-    process.gctUCTDigis,
-    process.gctUCTDigis*process.gctUCTDigis4x8*process.gctUCTDigis4x8iso)
+    process.uctGctDigis,
+    process.uctGctDigis*process.uctGctDigis4x8*process.uctGctDigis4x8iso)
 process.uct2015L1Extra.replace(
     process.gtUCTDigis,
     process.gtUCTDigis*process.gtUCTDigis4x8*process.gtUCTDigis4x8iso)
@@ -164,7 +164,7 @@ process.l1extraParticlesUCT2x1 = process.l1extraParticlesUCT.clone(
     hfRingEtSumsSource = cms.InputTag("uctGctDigis2x1"),
     hfRingBitCountsSource = cms.InputTag("uctGctDigis2x1")
 )
-process.l1extraParticlesUCT2x1isoiso = process.l1extraParticlesUCT.clone(
+process.l1extraParticlesUCT2x1iso = process.l1extraParticlesUCT.clone(
     etTotalSource = cms.InputTag("uctGctDigis2x1iso"),
     nonIsolatedEmSource = cms.InputTag("uctGctDigis2x1iso","nonIsoEm"),
     etMissSource = cms.InputTag("uctGctDigis2x1iso"),
@@ -178,8 +178,8 @@ process.l1extraParticlesUCT2x1isoiso = process.l1extraParticlesUCT.clone(
     hfRingBitCountsSource = cms.InputTag("uctGctDigis2x1iso")
 )
 process.uct2015L1Extra.replace(
-    process.gctUCTDigis,
-    process.gctUCTDigis*process.gctUCTDigis2x1*process.gctUCTDigis2x1iso)
+    process.uctGctDigis,
+    process.uctGctDigis*process.uctGctDigis2x1*process.uctGctDigis2x1iso)
 process.uct2015L1Extra.replace(
     process.gtUCTDigis,
     process.gtUCTDigis*process.gtUCTDigis2x1*process.gtUCTDigis2x1iso)
