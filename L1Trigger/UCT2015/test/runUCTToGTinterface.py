@@ -58,8 +58,9 @@ process.p1 = cms.Path(
 )
 
 # Make the framework shut up.
-process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 100
+#process.load("FWCore.MessageLogger.MessageLogger_cfi")
+#process.MessageLogger.cerr.FwkReport.reportEvery = 100
+#process.MessageLogger.cerr.threshold = cms.untracked.string('DEBUG')
 
 # Output definition
 process.output = cms.OutputModule("PoolOutputModule",
