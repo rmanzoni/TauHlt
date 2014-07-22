@@ -50,7 +50,6 @@ using std::vector;
 UCT2015GctCandsProducer::UCT2015GctCandsProducer(const edm::ParameterSet& ps) :
   egSourceRlx_(ps.getParameter<edm::InputTag>("egRelaxed")),
   egSourceIso_(ps.getParameter<edm::InputTag>("egIsolated")),
-  tauSourceRlx_(ps.getParameter<edm::InputTag>("tauRelaxed")),
   tauSourceIso_(ps.getParameter<edm::InputTag>("tauIsolated")),
   jetSource_(ps.getParameter<edm::InputTag>("jetSource")),
   setSource_(ps.getParameter<edm::InputTag>("setSource")),
@@ -150,7 +149,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( egSourceRlx_, egObjs ) ;
 
       if( !egObjs.isValid() ) {
-                LogDebug("")<<"EG Collection not found - check name";
+                edm::LogError("")<<"EG Collection not found - check name";
       }
       else {
                 for( unsigned int i = 0 ; i<egObjs->size() && i<maxEGs_; i++){
@@ -162,14 +161,19 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
                         unsigned rctEta=itr.getInt("rctEta");
                         unsigned gctEta=((rctEta & 0x7) | (iEta<11 ? 0x8 : 0x0));
                         unsigned rank = emScale->rank( ET) ;
+
+                        //std::cout<<"EG -->"<<itr.pt()<<"   "<<itr.getInt("isIsolated")<<"   --->"<<rlxEmResult->size()<<std::endl;
+                        
+                        if(itr.getInt("isIsolated")) continue;
+
                         L1GctEmCand gctEmCand=L1GctEmCand(rank,iPhi,gctEta,0);        
                         rlxEmResult->push_back( gctEmCand  );
                         
                 }
                 if(rlxEmResult->size()<maxEGs_)
-                        for ( unsigned int j = 0 ; j<(maxEGs_-egObjs->size()); j++){
+                        for ( unsigned int j = 0 ; j<(maxEGs_-rlxEmResult->size()); j++){
                                 L1GctEmCand gctEmCand=L1GctEmCand( 0,(unsigned)0,(unsigned)0,0);
-                                isoEmResult->push_back( gctEmCand  );
+                                rlxEmResult->push_back( gctEmCand  );
                         }
 
       }
@@ -180,7 +184,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( egSourceIso_, egObjsIso ) ;
 
       if( !egObjsIso.isValid() ) {
-                LogDebug("")<<"isoEG Collection not found - check name";
+                edm::LogError("")<<"isoEG Collection not found - check name";
       }
       else {
                 for( unsigned int i = 0 ; i<egObjsIso->size() && i<maxIsoEGs_; i++){
@@ -195,49 +199,18 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
 
                         unsigned rank = emScale->rank( ET) ;
 
+                        //std::cout<<"ISOEG -->"<<itr.pt()<<"   --->"<<isoEmResult->size()<<std::endl;
+
                         L1GctEmCand gctEmCand=L1GctEmCand(rank,iPhi,gctEta,1);
                         isoEmResult->push_back( gctEmCand  );
                 }
                 if(isoEmResult->size()<maxIsoEGs_)
-                        for ( unsigned int j = 0 ; j<(maxIsoEGs_-egObjsIso->size()); j++){
+                        for ( unsigned int j = 0 ; j<(maxIsoEGs_-isoEmResult->size()); j++){
                                 L1GctEmCand gctEmCand=L1GctEmCand( 0,(unsigned)0,(unsigned)0,1);
                                 isoEmResult->push_back( gctEmCand  );
                         }
       }
 
-
-     // TAU 
-     // They need to be treated as Jets! 
-/*   
-      edm::Handle< UCTCandidateCollection > tauObjs ;
-      e.getByLabel( tauSourceRlx_, tauObjs ) ;
-
-      if( !tauObjs.isValid() ) {
-                LogDebug("")<<"TAU Collection not found - check name";
-      }
-      else {
-                for( unsigned int i = 0 ; i<tauObjs->size() && i<maxTaus_; i++){
-                        UCTCandidate itr=tauObjs->at(i);
-                        unsigned iEta=itr.getInt("rgnEta");
-                        unsigned iPhi=itr.getInt("rgnPhi");
-                        unsigned rctEta=itr.getInt("rctEta");
-                        unsigned hwEta=(((rctEta % 7) & 0x7) | (iEta<11 ? 0x8 : 0));
-                        unsigned hwPhi= iPhi& 0x1f;
-                        const int16_t bx=0; 
-                        double pt=itr.getFloat("associatedRegionEt");
-                        unsigned rank = jetScale->rank(pt);
-                        bool isFor=false;
-                        bool isTau=true;
-                        L1GctJetCand gctJetCand=L1GctJetCand(rank, hwPhi, hwEta, isTau , isFor,(uint16_t) 0, (uint16_t) 0, bx);
-                        rlxTauResult->push_back( gctJetCand  );
-                }
-                if(rlxTauResult->size()<maxTaus_)
-                        for ( unsigned int j = 0 ; j<(maxTaus_-tauObjs->size()); j++){
-                                L1GctJetCand gctJetCand=L1GctJetCand( 0,(unsigned)0,(unsigned)0,1,0,(uint16_t) 0, (uint16_t) 0, 0);
-                                isoTauResult->push_back( gctJetCand  );
-                        }
-      }
-*/
 
      // isoTAU
      // We'll only use this one    
@@ -245,7 +218,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( tauSourceIso_, tauObjsIso ) ;
 
       if( !tauObjsIso.isValid() ) {
-                LogDebug("")<<"isoTAU Collection not found - check name";
+                edm::LogError("")<<"isoTAU Collection not found - check name";
       }
       else {
                 for( unsigned int i = 0 ; i<tauObjsIso->size() && i<maxIsoTaus_; i++){
@@ -263,9 +236,10 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
                         bool isTau=true;
                         L1GctJetCand gctJetCand=L1GctJetCand(rank, hwPhi, hwEta, isTau , isFor,(uint16_t) 0, (uint16_t) 0, bx);
                         isoTauResult->push_back( gctJetCand  );
+
                 }
                 if(isoTauResult->size()<maxIsoTaus_)
-                        for ( unsigned int j = 0 ; j<(maxIsoTaus_-tauObjsIso->size()); j++){
+                        for ( unsigned int j = 0 ; j<(maxIsoTaus_-isoTauResult->size()); j++){
                                 L1GctJetCand gctJetCand=L1GctJetCand( 0,(unsigned)0,(unsigned)0,1,0,(uint16_t) 0, (uint16_t) 0, 0);
                                 isoTauResult->push_back( gctJetCand  );
                         }
@@ -278,7 +252,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( jetSource_, jetObjs) ;
 
       if( !jetObjs.isValid() ) {
-                LogDebug("")<<"JET Collection not found - check name";
+                edm::LogError("")<<"JET Collection not found - check name";
       }
       else {
                 for( unsigned int i = 0 ; i<jetObjs->size() &&  i<maxJets_; i++){
@@ -332,7 +306,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( setSource_, setObjs) ;
 
       if( !setObjs.isValid() ) {
-                LogDebug("")<<"SET Collection not found - check name";
+                edm::LogError("")<<"SET Collection not found - check name";
       }
       else {
                 if(setObjs->size()>0){ // This is just for safety        
@@ -353,7 +327,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( shtSource_, shtObjs) ;
 
       if( !shtObjs.isValid() ) {
-                LogDebug("")<<"SHT Collection not found - check name";
+                edm::LogError("")<<"SHT Collection not found - check name";
       }
       else {
                 if(shtObjs->size()>0){ // This is just for safety
@@ -375,7 +349,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( metSource_, metObjs) ;
 
       if( !metObjs.isValid() ) {
-                LogDebug("")<<"MET Collection not found - check name";
+                edm::LogError("")<<"MET Collection not found - check name";
       }
       else {
                 if(metObjs->size()>0){ // This is just for safety
@@ -398,7 +372,7 @@ void UCT2015GctCandsProducer::produce(edm::Event& e, const edm::EventSetup& c) {
       e.getByLabel( mhtSource_, mhtObjs) ;
 
       if( !mhtObjs.isValid() ) {
-                LogDebug("")<<"MHT Collection not found - check name";
+                edm::LogError("")<<"MHT Collection not found - check name";
       }
       else {
                 if(mhtObjs->size()>0){ // This is just for safety
